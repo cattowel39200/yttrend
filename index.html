@@ -224,9 +224,33 @@
             font-size: 1.2rem;
         }
 
+        .results-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         .results-count {
             color: #888;
             font-size: 0.9rem;
+        }
+
+        .export-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #0f9d58;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .export-btn:hover {
+            background: #0b8043;
         }
 
         /* 테이블 스타일 */
@@ -569,10 +593,10 @@
                 <label>영상 길이</label>
                 <select id="duration">
                     <option value="any">전체</option>
-                    <option value="5">5분 이하</option>
-                    <option value="10">10분 이하</option>
-                    <option value="20">20분 이하</option>
-                    <option value="30">30분 이하</option>
+                    <option value="0-1">1분 이하</option>
+                    <option value="1-10">1~10분</option>
+                    <option value="11-20">11~20분</option>
+                    <option value="21-30">21~30분</option>
                     <option value="30+">30분 이상</option>
                 </select>
             </div>
@@ -652,7 +676,15 @@
         <div class="results" id="resultsContainer" style="display: none;">
             <div class="results-header">
                 <h2>검색 결과</h2>
-                <span class="results-count" id="resultsCount"></span>
+                <div class="results-actions">
+                    <span class="results-count" id="resultsCount"></span>
+                    <button class="export-btn" onclick="exportToGoogleSheets()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"/>
+                        </svg>
+                        구글 시트로 내보내기
+                    </button>
+                </div>
             </div>
             <table class="video-table" id="videoTable">
                 <thead>
@@ -1098,9 +1130,14 @@
                     if (duration !== 'any') {
                         if (duration === '30+') {
                             if (minutes < 30) return false;
-                        } else {
-                            const maxMinutes = parseInt(duration);
-                            if (minutes > maxMinutes) return false;
+                        } else if (duration === '0-1') {
+                            if (minutes > 1) return false;
+                        } else if (duration === '1-10') {
+                            if (minutes < 1 || minutes > 10) return false;
+                        } else if (duration === '11-20') {
+                            if (minutes < 11 || minutes > 20) return false;
+                        } else if (duration === '21-30') {
+                            if (minutes < 21 || minutes > 30) return false;
                         }
                     }
 
@@ -1127,6 +1164,63 @@
             } finally {
                 loadingContainer.style.display = 'none';
             }
+        }
+
+        // 구글 시트로 내보내기
+        function exportToGoogleSheets() {
+            if (currentVideos.length === 0) {
+                alert('내보낼 데이터가 없습니다.');
+                return;
+            }
+
+            // 헤더 행
+            const headers = ['제목', '채널명', '구독자수', '조회수', '영상시간', '업로드일', '트렌드점수', '링크'];
+
+            // 데이터 행 생성
+            const rows = currentVideos.map(video => {
+                const subscribers = channelSubscribersMap[video.snippet.channelId] || 0;
+                const views = parseInt(video.statistics.viewCount || 0);
+                const duration = formatDuration(video.contentDetails.duration);
+                const publishedAt = new Date(video.snippet.publishedAt).toLocaleDateString('ko-KR');
+                const trendScore = (subscribers > 0 ? (views / subscribers) * 100 : 0).toFixed(2);
+                const videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
+
+                return [
+                    video.snippet.title.replace(/\t/g, ' '),
+                    video.snippet.channelTitle.replace(/\t/g, ' '),
+                    subscribers,
+                    views,
+                    duration,
+                    publishedAt,
+                    trendScore,
+                    videoUrl
+                ];
+            });
+
+            // 탭으로 구분된 데이터 생성 (구글 시트 붙여넣기용)
+            const tsvData = [headers, ...rows].map(row => row.join('\t')).join('\n');
+
+            // 클립보드에 복사
+            navigator.clipboard.writeText(tsvData).then(() => {
+                // 새 구글 시트 열기
+                const googleSheetUrl = 'https://docs.google.com/spreadsheets/create';
+                window.open(googleSheetUrl, '_blank');
+
+                alert('데이터가 클립보드에 복사되었습니다!\n\n새 구글 시트에서 Ctrl+V (또는 Cmd+V)로 붙여넣기 하세요.');
+            }).catch(err => {
+                // 클립보드 복사 실패 시 CSV 다운로드
+                const csvContent = [headers, ...rows].map(row =>
+                    row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+                ).join('\n');
+
+                const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `youtube_trend_${new Date().toISOString().slice(0,10)}.csv`;
+                link.click();
+
+                alert('CSV 파일이 다운로드됩니다.\n\n구글 드라이브에 업로드하거나\n구글 시트에서 "파일 > 가져오기"를 사용하세요.');
+            });
         }
 
         // 페이지 로드 시 초기화
