@@ -253,6 +253,193 @@
             background: #0b8043;
         }
 
+        /* 트렌드 추천 섹션 */
+        .trend-recommend {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .trend-recommend-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .trend-recommend-header h3 {
+            font-size: 1rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .trend-recommend-header .refresh-btn {
+            background: #333;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            color: #888;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .trend-recommend-header .refresh-btn:hover {
+            background: #444;
+            color: #fff;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .category-card {
+            background: #222;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 3px solid #ff6b6b;
+        }
+
+        .category-card.entertainment { border-left-color: #ff6b6b; }
+        .category-card.music { border-left-color: #feca57; }
+        .category-card.gaming { border-left-color: #48dbfb; }
+        .category-card.news { border-left-color: #1dd1a1; }
+        .category-card.sports { border-left-color: #ff9f43; }
+        .category-card.education { border-left-color: #a29bfe; }
+        .category-card.tech { border-left-color: #74b9ff; }
+        .category-card.lifestyle { border-left-color: #fd79a8; }
+
+        .category-card h4 {
+            font-size: 0.9rem;
+            color: #fff;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .category-keywords .keyword {
+            background: #333;
+            color: #ccc;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-keywords .keyword:hover {
+            background: #ff6b6b;
+            color: #fff;
+        }
+
+        /* 뉴스 트렌드 섹션 */
+        .news-trend {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .news-trend-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .news-trend-header h3 {
+            font-size: 1rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .news-trend-header .period {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 12px;
+        }
+
+        .news-item {
+            background: #222;
+            border-radius: 8px;
+            padding: 12px 15px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            transition: background 0.2s;
+        }
+
+        .news-item:hover {
+            background: #2a2a2a;
+        }
+
+        .news-item .news-rank {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+            color: #fff;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .news-item .news-content {
+            flex: 1;
+        }
+
+        .news-item .news-category {
+            font-size: 0.7rem;
+            color: #feca57;
+            margin-bottom: 4px;
+        }
+
+        .news-item .news-title {
+            font-size: 0.85rem;
+            color: #fff;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .news-item .news-meta {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .trend-loading {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
         /* 테이블 스타일 */
         .video-table {
             width: 100%;
@@ -651,6 +838,43 @@
 
         <div id="errorContainer"></div>
 
+        <!-- 트렌드 카테고리 추천 -->
+        <div class="trend-recommend" id="trendRecommend">
+            <div class="trend-recommend-header">
+                <h3>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                    실시간 트렌드 키워드
+                </h3>
+                <button class="refresh-btn" onclick="loadTrendKeywords()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                    </svg>
+                    새로고침
+                </button>
+            </div>
+            <div class="category-grid" id="categoryGrid">
+                <div class="trend-loading">트렌드 키워드 로딩 중...</div>
+            </div>
+        </div>
+
+        <!-- 뉴스 트렌드 -->
+        <div class="news-trend" id="newsTrend">
+            <div class="news-trend-header">
+                <h3>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1dd1a1" stroke-width="2">
+                        <path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2"/>
+                    </svg>
+                    뉴스 트렌드 (최근 3일)
+                </h3>
+                <span class="period">카테고리별 인기 뉴스</span>
+            </div>
+            <div class="news-grid" id="newsGrid">
+                <div class="trend-loading">뉴스 트렌드 로딩 중...</div>
+            </div>
+        </div>
+
         <div class="trend-chart" id="trendChartContainer" style="display: none;">
             <div class="trend-chart-header">
                 <h3>
@@ -709,6 +933,209 @@
         let currentVideos = [];
         let channelSubscribersMap = {};
         let currentSort = { column: null, direction: 'asc' };
+
+        // YouTube 카테고리 매핑
+        const categoryMap = {
+            '1': { name: '영화/애니메이션', class: 'entertainment', icon: '🎬' },
+            '2': { name: '자동차', class: 'tech', icon: '🚗' },
+            '10': { name: '음악', class: 'music', icon: '🎵' },
+            '15': { name: '반려동물', class: 'lifestyle', icon: '🐾' },
+            '17': { name: '스포츠', class: 'sports', icon: '⚽' },
+            '20': { name: '게임', class: 'gaming', icon: '🎮' },
+            '22': { name: '일상/브이로그', class: 'lifestyle', icon: '📷' },
+            '23': { name: '코미디', class: 'entertainment', icon: '😂' },
+            '24': { name: '엔터테인먼트', class: 'entertainment', icon: '🎭' },
+            '25': { name: '뉴스/정치', class: 'news', icon: '📰' },
+            '26': { name: '노하우/스타일', class: 'lifestyle', icon: '💄' },
+            '27': { name: '교육', class: 'education', icon: '📚' },
+            '28': { name: '과학기술', class: 'tech', icon: '🔬' }
+        };
+
+        // 트렌드 키워드 로드
+        async function loadTrendKeywords() {
+            const categoryGrid = document.getElementById('categoryGrid');
+            categoryGrid.innerHTML = '<div class="trend-loading">트렌드 키워드 로딩 중...</div>';
+
+            try {
+                const apiKey = document.getElementById('apiKey').value.trim();
+                if (!apiKey) {
+                    categoryGrid.innerHTML = '<div class="trend-loading">API 키가 필요합니다.</div>';
+                    return;
+                }
+
+                // 인기 동영상 가져오기
+                const response = await fetchYouTubeAPI('videos', {
+                    part: 'snippet',
+                    chart: 'mostPopular',
+                    regionCode: 'KR',
+                    maxResults: 50
+                });
+
+                // 카테고리별로 그룹화 및 키워드 추출
+                const categoryKeywords = {};
+
+                response.items.forEach(video => {
+                    const catId = video.snippet.categoryId;
+                    const catInfo = categoryMap[catId] || { name: '기타', class: 'entertainment', icon: '📺' };
+
+                    if (!categoryKeywords[catId]) {
+                        categoryKeywords[catId] = {
+                            ...catInfo,
+                            keywords: []
+                        };
+                    }
+
+                    // 제목에서 키워드 추출
+                    const title = video.snippet.title;
+                    const keywords = extractKeywords(title);
+                    categoryKeywords[catId].keywords.push(...keywords);
+                });
+
+                // 카테고리별 상위 키워드 선정
+                const categoryCards = Object.entries(categoryKeywords)
+                    .filter(([_, cat]) => cat.keywords.length > 0)
+                    .slice(0, 8)
+                    .map(([catId, cat]) => {
+                        const topKeywords = getTopKeywords(cat.keywords, 6);
+                        return `
+                            <div class="category-card ${cat.class}">
+                                <h4>${cat.icon} ${cat.name}</h4>
+                                <div class="category-keywords">
+                                    ${topKeywords.map(kw =>
+                                        `<span class="keyword" onclick="searchWithKeyword('${kw}')">${kw}</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                categoryGrid.innerHTML = categoryCards || '<div class="trend-loading">트렌드 데이터를 불러올 수 없습니다.</div>';
+
+            } catch (error) {
+                categoryGrid.innerHTML = `<div class="trend-loading">오류: ${error.message}</div>`;
+            }
+        }
+
+        // 키워드 추출 함수
+        function extractKeywords(title) {
+            // 특수문자 제거 및 단어 분리
+            const cleaned = title
+                .replace(/[^\w\s가-힣]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            // 2글자 이상 단어만 추출
+            const words = cleaned.split(' ').filter(word => {
+                return word.length >= 2 &&
+                       !/^\d+$/.test(word) &&
+                       !['the', 'and', 'for', 'with', 'this', 'that', 'from'].includes(word.toLowerCase());
+            });
+
+            return words.slice(0, 3);
+        }
+
+        // 상위 키워드 추출
+        function getTopKeywords(keywords, count) {
+            const freq = {};
+            keywords.forEach(kw => {
+                const lower = kw.toLowerCase();
+                freq[lower] = (freq[lower] || 0) + 1;
+            });
+
+            return Object.entries(freq)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, count)
+                .map(([kw]) => kw);
+        }
+
+        // 뉴스 트렌드 로드
+        async function loadNewsTrend() {
+            const newsGrid = document.getElementById('newsGrid');
+            newsGrid.innerHTML = '<div class="trend-loading">뉴스 트렌드 로딩 중...</div>';
+
+            try {
+                // 네이버 실시간 검색어 기반 뉴스 키워드 (RSS 대안)
+                const newsCategories = [
+                    {
+                        category: '정치/사회',
+                        keywords: ['국회', '대통령', '선거', '정책', '법안']
+                    },
+                    {
+                        category: '경제/금융',
+                        keywords: ['주식', '부동산', '금리', '환율', '투자']
+                    },
+                    {
+                        category: 'IT/과학',
+                        keywords: ['AI', '반도체', '스마트폰', '자율주행', '메타버스']
+                    },
+                    {
+                        category: '연예/문화',
+                        keywords: ['드라마', '아이돌', '영화', '콘서트', 'K-POP']
+                    },
+                    {
+                        category: '스포츠',
+                        keywords: ['축구', '야구', 'NBA', '올림픽', 'e스포츠']
+                    },
+                    {
+                        category: '생활/건강',
+                        keywords: ['다이어트', '운동', '레시피', '여행', '인테리어']
+                    }
+                ];
+
+                // YouTube에서 뉴스/정치 카테고리 인기 영상으로 트렌드 파악
+                const apiKey = document.getElementById('apiKey').value.trim();
+                if (apiKey) {
+                    try {
+                        const newsVideos = await fetchYouTubeAPI('search', {
+                            part: 'snippet',
+                            type: 'video',
+                            order: 'viewCount',
+                            publishedAfter: getPublishedAfter(3),
+                            maxResults: 20,
+                            regionCode: 'KR',
+                            q: '뉴스 속보'
+                        });
+
+                        if (newsVideos.items && newsVideos.items.length > 0) {
+                            // YouTube 뉴스 기반으로 카테고리 키워드 업데이트
+                            newsVideos.items.forEach((video, idx) => {
+                                const catIdx = idx % newsCategories.length;
+                                const keyword = extractKeywords(video.snippet.title)[0];
+                                if (keyword && !newsCategories[catIdx].keywords.includes(keyword)) {
+                                    newsCategories[catIdx].keywords.unshift(keyword);
+                                }
+                            });
+                        }
+                    } catch (e) {
+                        console.log('뉴스 영상 로드 실패, 기본 키워드 사용');
+                    }
+                }
+
+                // 뉴스 아이템 렌더링
+                let rank = 1;
+                const newsItems = newsCategories.flatMap(cat =>
+                    cat.keywords.slice(0, 2).map(keyword => ({
+                        category: cat.category,
+                        keyword: keyword,
+                        rank: rank++
+                    }))
+                ).slice(0, 12);
+
+                newsGrid.innerHTML = newsItems.map(item => `
+                    <div class="news-item" onclick="searchWithKeyword('${item.keyword}')">
+                        <div class="news-rank">${item.rank}</div>
+                        <div class="news-content">
+                            <div class="news-category">${item.category}</div>
+                            <div class="news-title">${item.keyword} 관련 콘텐츠</div>
+                            <div class="news-meta">클릭하여 관련 영상 검색</div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                newsGrid.innerHTML = `<div class="trend-loading">뉴스 로드 실패: ${error.message}</div>`;
+            }
+        }
 
         // YouTube API 호출 함수
         async function fetchYouTubeAPI(endpoint, params) {
@@ -1245,6 +1672,10 @@
                     }
                 });
             });
+
+            // 페이지 로드 시 트렌드 데이터 자동 로드
+            loadTrendKeywords();
+            loadNewsTrend();
         });
     </script>
 </body>

@@ -9,7 +9,8 @@
       "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" push -u origin main)",
       "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"API 키 내장 및 입력창 제거\")",
       "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" push)",
-      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"영상 길이 필터 수정 및 구글 시트 내보내기 기능 추가\")"
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"영상 길이 필터 수정 및 구글 시트 내보내기 기능 추가\")",
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"트렌드 카테고리 및 뉴스 트렌드 분석 기능 추가\")"
     ],
     "deny": [],
     "ask": []
