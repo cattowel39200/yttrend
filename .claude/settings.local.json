@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" add .)",
-      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"유튜브 연관 키워드 탐색기 - 초기 커밋\")"
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"유튜브 연관 키워드 탐색기 - 초기 커밋\")",
+      "Bash(gh repo create yttrend --public --source=\"C:\\Users\\vip\\Documents\\github\\yttrend\" --push)",
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" remote add origin https://github.com/cattowel39200/yttrend.git)",
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" branch -M main)",
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" push -u origin main)",
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"API 키 내장 및 입력창 제거\")",
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" push)"
     ],
     "deny": [],
     "ask": []
