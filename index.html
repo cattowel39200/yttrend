@@ -440,6 +440,35 @@
             color: #666;
         }
 
+        /* 복사 버튼 */
+        .copy-btn {
+            background: #444;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            background: #666;
+        }
+
+        .copy-btn.copied {
+            background: #0f9d58;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
         /* 테이블 스타일 */
         .video-table {
             width: 100%;
@@ -920,7 +949,7 @@
                         <th class="sortable" data-sort="views">조회수</th>
                         <th class="sortable" data-sort="duration">영상시간</th>
                         <th class="sortable" data-sort="date">업로드일</th>
-                        <th>링크</th>
+                        <th>액션</th>
                     </tr>
                 </thead>
                 <tbody id="videoTableBody"></tbody>
@@ -1451,12 +1480,21 @@
                         <td class="duration-cell">${duration}</td>
                         <td class="date-cell">${publishedAt}</td>
                         <td class="link-cell">
-                            <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" class="link-btn">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/>
-                                </svg>
-                                보기
-                            </a>
+                            <div class="action-buttons">
+                                <button class="copy-btn" onclick="copyVideoInfo('${video.id}', this)" title="정보 복사">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                                    </svg>
+                                    복사
+                                </button>
+                                <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" class="link-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/>
+                                    </svg>
+                                    보기
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -1591,6 +1629,47 @@
             } finally {
                 loadingContainer.style.display = 'none';
             }
+        }
+
+        // 영상 정보 복사
+        function copyVideoInfo(videoId, button) {
+            const video = currentVideos.find(v => v.id === videoId);
+            if (!video) return;
+
+            const subscribers = channelSubscribersMap[video.snippet.channelId] || 0;
+            const views = parseInt(video.statistics.viewCount || 0);
+            const duration = formatDuration(video.contentDetails.duration);
+            const publishedAt = new Date(video.snippet.publishedAt).toLocaleDateString('ko-KR');
+            const videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
+            const trendScore = (subscribers > 0 ? (views / subscribers) * 100 : 0).toFixed(2);
+
+            const copyText = `제목: ${video.snippet.title}
+채널: ${video.snippet.channelTitle}
+구독자: ${formatSubscribers(subscribers)}
+조회수: ${formatViews(views)}
+영상시간: ${duration}
+업로드일: ${publishedAt}
+트렌드점수: ${trendScore}
+링크: ${videoUrl}`;
+
+            navigator.clipboard.writeText(copyText).then(() => {
+                // 버튼 상태 변경
+                const originalText = button.innerHTML;
+                button.classList.add('copied');
+                button.innerHTML = `
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    완료!
+                `;
+
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    button.innerHTML = originalText;
+                }, 1500);
+            }).catch(err => {
+                alert('복사 실패: ' + err.message);
+            });
         }
 
         // 구글 시트로 내보내기
