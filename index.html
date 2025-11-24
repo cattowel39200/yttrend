@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유튜브 연관 키워드 탐색기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: #888;
+            font-size: 1rem;
+        }
+
+        .api-key-section {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .api-key-section label {
+            color: #888;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .api-key-section input {
+            flex: 1;
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: #fff;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .filter-group select option {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .search-section {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .search-section label {
+            display: block;
+            font-size: 0.85rem;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px 20px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .search-box button {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a5a);
+            border: none;
+            border-radius: 8px;
+            padding: 15px 30px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .related-keywords {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .related-keywords .keyword-tag {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .related-keywords .keyword-tag:hover {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+        }
+
+        .loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #333;
+            border-top-color: #ff6b6b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .results {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+
+        .results-header h2 {
+            font-size: 1.2rem;
+        }
+
+        .results-count {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* 테이블 스타일 */
+        .video-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        .video-table thead {
+            background: #252525;
+        }
+
+        .video-table th {
+            padding: 12px 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #aaa;
+            border-bottom: 2px solid #333;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .video-table th:hover {
+            background: #333;
+        }
+
+        .video-table th.sortable::after {
+            content: ' ↕';
+            color: #555;
+            font-size: 0.8rem;
+        }
+
+        .video-table th.sort-asc::after {
+            content: ' ↑';
+            color: #ff6b6b;
+        }
+
+        .video-table th.sort-desc::after {
+            content: ' ↓';
+            color: #ff6b6b;
+        }
+
+        .video-table tbody tr {
+            border-bottom: 1px solid #2a2a2a;
+            transition: background 0.2s;
+        }
+
+        .video-table tbody tr:hover {
+            background: #252525;
+        }
+
+        .video-table td {
+            padding: 12px 10px;
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+
+        .video-table .thumbnail-cell {
+            width: 100px;
+        }
+
+        .video-table .thumbnail {
+            width: 100px;
+            height: 75px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .video-table .title-cell {
+            max-width: 300px;
+        }
+
+        .video-table .title-cell a {
+            color: #fff;
+            text-decoration: none;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+
+        .video-table .title-cell a:hover {
+            color: #ff6b6b;
+        }
+
+        .video-table .channel-cell {
+            color: #feca57;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .video-table .subscribers-cell {
+            color: #48dbfb;
+            white-space: nowrap;
+        }
+
+        .video-table .views-cell {
+            color: #ff6b6b;
+            white-space: nowrap;
+        }
+
+        .video-table .duration-cell {
+            white-space: nowrap;
+        }
+
+        .video-table .date-cell {
+            white-space: nowrap;
+            color: #888;
+        }
+
+        .video-table .link-cell {
+            text-align: center;
+        }
+
+        .video-table .link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #ff0000;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .video-table .link-btn:hover {
+            background: #cc0000;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+        }
+
+        .error-message {
+            background: #3d1f1f;
+            border: 1px solid #ff6b6b;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+
+        /* 트렌드 차트 스타일 */
+        .trend-chart {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .trend-chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .trend-chart-header h3 {
+            font-size: 1rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .trend-chart-header .info {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 150px;
+            padding: 10px 0;
+            overflow-x: auto;
+        }
+
+        .chart-bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 30px;
+            max-width: 60px;
+            height: 100%;
+        }
+
+        .chart-bar {
+            width: 100%;
+            background: linear-gradient(180deg, #ff6b6b, #ee5a5a);
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .chart-bar:hover {
+            background: linear-gradient(180deg, #feca57, #f0b429);
+            transform: scaleX(1.1);
+        }
+
+        .chart-bar .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+            z-index: 100;
+            pointer-events: none;
+            margin-bottom: 5px;
+        }
+
+        .chart-bar .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #333;
+        }
+
+        .chart-bar:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .chart-label {
+            font-size: 0.65rem;
+            color: #888;
+            text-align: center;
+            margin-top: 5px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .chart-label:hover {
+            color: #ff6b6b;
+        }
+
+        .chart-score {
+            font-size: 0.7rem;
+            color: #feca57;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .chart-y-axis {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 150px;
+            padding-right: 10px;
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .chart-wrapper {
+            display: flex;
+            width: 100%;
+        }
+
+        .chart-bars-area {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 150px;
+            border-left: 1px solid #333;
+            border-bottom: 1px solid #333;
+            padding: 0 10px 0 10px;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 768px) {
+            .filters {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .results {
+                padding: 10px;
+            }
+
+            .chart-bar-wrapper {
+                min-width: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>유튜브 연관 키워드 탐색기</h1>
+            <p>키워드 기반으로 관련 주제와 영상을 찾아드립니다.</p>
+        </header>
+
+        <div class="api-key-section">
+            <label for="apiKey">YouTube API Key:</label>
+            <input type="password" id="apiKey" placeholder="API 키를 입력하세요">
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>기간</label>
+                <select id="period">
+                    <option value="1">1일</option>
+                    <option value="7">1주</option>
+                    <option value="14">2주</option>
+                    <option value="30" selected>1개월</option>
+                    <option value="90">3개월</option>
+                    <option value="365">1년</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>영상 길이</label>
+                <select id="duration">
+                    <option value="any">전체</option>
+                    <option value="5">5분 이하</option>
+                    <option value="10">10분 이하</option>
+                    <option value="20">20분 이하</option>
+                    <option value="30">30분 이하</option>
+                    <option value="30+">30분 이상</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>구독자 상한</label>
+                <select id="maxSubscribers">
+                    <option value="any">제한 없음</option>
+                    <option value="1000">1천 이하</option>
+                    <option value="10000">1만 이하</option>
+                    <option value="100000">10만 이하</option>
+                    <option value="1000000">100만 이하</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>최소 조회수</label>
+                <select id="minViews">
+                    <option value="0">제한 없음</option>
+                    <option value="100">100+</option>
+                    <option value="1000">1천+</option>
+                    <option value="10000" selected>1만+</option>
+                    <option value="100000">10만+</option>
+                    <option value="1000000">100만+</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>결과 수</label>
+                <select id="maxResults">
+                    <option value="10">10개</option>
+                    <option value="25" selected>25개</option>
+                    <option value="50">50개</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <label>키워드 검색</label>
+            <div class="search-box">
+                <input type="text" id="keyword" placeholder="검색할 키워드를 입력하세요" onkeypress="if(event.key==='Enter') search()">
+                <button onclick="search()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    검색
+                </button>
+            </div>
+            <div class="related-keywords" id="relatedKeywords"></div>
+        </div>
+
+        <div id="errorContainer"></div>
+
+        <div class="trend-chart" id="trendChartContainer" style="display: none;">
+            <div class="trend-chart-header">
+                <h3>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#feca57" stroke-width="2">
+                        <path d="M3 3v18h18"/>
+                        <path d="M18 9l-5 5-4-4-6 6"/>
+                    </svg>
+                    트렌드 분석
+                </h3>
+                <span class="info">점수 = 조회수 / 구독자수 (클릭 시 영상으로 이동)</span>
+            </div>
+            <div class="chart-wrapper">
+                <div class="chart-y-axis" id="chartYAxis"></div>
+                <div class="chart-bars-area" id="chartBarsArea"></div>
+            </div>
+        </div>
+
+        <div id="loadingContainer" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>검색 중입니다...</p>
+        </div>
+
+        <div class="results" id="resultsContainer" style="display: none;">
+            <div class="results-header">
+                <h2>검색 결과</h2>
+                <span class="results-count" id="resultsCount"></span>
+            </div>
+            <table class="video-table" id="videoTable">
+                <thead>
+                    <tr>
+                        <th>썸네일</th>
+                        <th class="sortable" data-sort="title">제목</th>
+                        <th class="sortable" data-sort="channel">채널명</th>
+                        <th class="sortable" data-sort="subscribers">구독자수</th>
+                        <th class="sortable" data-sort="views">조회수</th>
+                        <th class="sortable" data-sort="duration">영상시간</th>
+                        <th class="sortable" data-sort="date">업로드일</th>
+                        <th>링크</th>
+                    </tr>
+                </thead>
+                <tbody id="videoTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // 전역 변수
+        let currentVideos = [];
+        let channelSubscribersMap = {};
+        let currentSort = { column: null, direction: 'asc' };
+
+        // YouTube API 호출 함수
+        async function fetchYouTubeAPI(endpoint, params) {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            if (!apiKey) {
+                throw new Error('API 키를 입력해주세요.');
+            }
+
+            const url = new URL(`https://www.googleapis.com/youtube/v3/${endpoint}`);
+            params.key = apiKey;
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined && value !== null) {
+                    url.searchParams.append(key, value);
+                }
+            });
+
+            const response = await fetch(url);
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error?.message || 'API 요청 실패');
+            }
+            return response.json();
+        }
+
+        // 연관 키워드 조회
+        async function fetchRelatedKeywords(keyword) {
+            try {
+                const suggestions = await getYouTubeSuggestions(keyword);
+                displayRelatedKeywords(suggestions);
+            } catch (error) {
+                console.error('연관 키워드 조회 실패:', error);
+            }
+        }
+
+        // YouTube 자동완성 제안 가져오기
+        async function getYouTubeSuggestions(keyword) {
+            const variations = [
+                keyword + ' 추천',
+                keyword + ' 리뷰',
+                keyword + ' 방법',
+                keyword + ' 강의',
+                keyword + ' 브이로그',
+                keyword + ' 2024',
+                keyword + ' 입문',
+                keyword + ' 비교'
+            ];
+            return variations.slice(0, 8);
+        }
+
+        // 연관 키워드 표시
+        function displayRelatedKeywords(keywords) {
+            const container = document.getElementById('relatedKeywords');
+            container.innerHTML = keywords.map(kw =>
+                `<span class="keyword-tag" onclick="searchWithKeyword('${kw}')">${kw}</span>`
+            ).join('');
+        }
+
+        // 클릭한 키워드로 검색
+        function searchWithKeyword(keyword) {
+            document.getElementById('keyword').value = keyword;
+            search();
+        }
+
+        // 날짜 계산
+        function getPublishedAfter(days) {
+            const date = new Date();
+            date.setDate(date.getDate() - days);
+            return date.toISOString();
+        }
+
+        // 구독자 수 포맷
+        function formatSubscribers(count) {
+            if (count >= 1000000) {
+                return (count / 1000000).toFixed(1) + 'M';
+            } else if (count >= 1000) {
+                return (count / 1000).toFixed(1) + 'K';
+            }
+            return count.toString();
+        }
+
+        // 조회수 포맷
+        function formatViews(count) {
+            if (count >= 100000000) {
+                return (count / 100000000).toFixed(1) + '억';
+            } else if (count >= 10000) {
+                return (count / 10000).toFixed(1) + '만';
+            } else if (count >= 1000) {
+                return (count / 1000).toFixed(1) + '천';
+            }
+            return count.toString();
+        }
+
+        // ISO 8601 기간을 분:초로 변환
+        function formatDuration(isoDuration) {
+            const match = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+            if (!match) return '0:00';
+
+            const hours = parseInt(match[1] || 0);
+            const minutes = parseInt(match[2] || 0);
+            const seconds = parseInt(match[3] || 0);
+
+            if (hours > 0) {
+                return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // 기간을 초로 변환 (정렬용)
+        function durationToSeconds(isoDuration) {
+            const match = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+            if (!match) return 0;
+
+            const hours = parseInt(match[1] || 0);
+            const minutes = parseInt(match[2] || 0);
+            const seconds = parseInt(match[3] || 0);
+
+            return hours * 3600 + minutes * 60 + seconds;
+        }
+
+        // 기간을 분으로 변환 (필터용)
+        function durationToMinutes(isoDuration) {
+            return durationToSeconds(isoDuration) / 60;
+        }
+
+        // 업로드 날짜 포맷
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = now - date;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            if (days === 0) return '오늘';
+            if (days === 1) return '어제';
+            if (days < 7) return `${days}일 전`;
+            if (days < 30) return `${Math.floor(days / 7)}주 전`;
+            if (days < 365) return `${Math.floor(days / 30)}개월 전`;
+            return `${Math.floor(days / 365)}년 전`;
+        }
+
+        // 에러 표시
+        function showError(message) {
+            const container = document.getElementById('errorContainer');
+            container.innerHTML = `<div class="error-message">${message}</div>`;
+        }
+
+        // 에러 숨기기
+        function hideError() {
+            document.getElementById('errorContainer').innerHTML = '';
+        }
+
+        // 정렬 함수
+        function sortVideos(column) {
+            // 정렬 방향 결정
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+
+            // 헤더 스타일 업데이트
+            document.querySelectorAll('.video-table th.sortable').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+            const currentTh = document.querySelector(`th[data-sort="${column}"]`);
+            if (currentTh) {
+                currentTh.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+            }
+
+            // 정렬 수행
+            currentVideos.sort((a, b) => {
+                let valA, valB;
+
+                switch (column) {
+                    case 'title':
+                        valA = a.snippet.title.toLowerCase();
+                        valB = b.snippet.title.toLowerCase();
+                        break;
+                    case 'channel':
+                        valA = a.snippet.channelTitle.toLowerCase();
+                        valB = b.snippet.channelTitle.toLowerCase();
+                        break;
+                    case 'subscribers':
+                        valA = channelSubscribersMap[a.snippet.channelId] || 0;
+                        valB = channelSubscribersMap[b.snippet.channelId] || 0;
+                        break;
+                    case 'views':
+                        valA = parseInt(a.statistics.viewCount || 0);
+                        valB = parseInt(b.statistics.viewCount || 0);
+                        break;
+                    case 'duration':
+                        valA = durationToSeconds(a.contentDetails.duration);
+                        valB = durationToSeconds(b.contentDetails.duration);
+                        break;
+                    case 'date':
+                        valA = new Date(a.snippet.publishedAt).getTime();
+                        valB = new Date(b.snippet.publishedAt).getTime();
+                        break;
+                    default:
+                        return 0;
+                }
+
+                if (typeof valA === 'string') {
+                    return currentSort.direction === 'asc'
+                        ? valA.localeCompare(valB)
+                        : valB.localeCompare(valA);
+                } else {
+                    return currentSort.direction === 'asc'
+                        ? valA - valB
+                        : valB - valA;
+                }
+            });
+
+            // 테이블 다시 렌더링
+            renderTable();
+        }
+
+        // 트렌드 점수 계산 (조회수 / 구독자수)
+        function calculateTrendScore(views, subscribers) {
+            if (subscribers === 0) return views > 0 ? 100 : 0;
+            return (views / subscribers) * 100;
+        }
+
+        // 트렌드 차트 렌더링
+        function renderTrendChart() {
+            const chartContainer = document.getElementById('trendChartContainer');
+            const barsArea = document.getElementById('chartBarsArea');
+            const yAxis = document.getElementById('chartYAxis');
+
+            if (currentVideos.length === 0) {
+                chartContainer.style.display = 'none';
+                return;
+            }
+
+            // 점수 계산 및 정렬
+            const videosWithScore = currentVideos.map(video => {
+                const views = parseInt(video.statistics.viewCount || 0);
+                const subscribers = channelSubscribersMap[video.snippet.channelId] || 1;
+                const score = calculateTrendScore(views, subscribers);
+                return { video, score, views, subscribers };
+            }).sort((a, b) => b.score - a.score);
+
+            // 최대 점수
+            const maxScore = Math.max(...videosWithScore.map(v => v.score), 1);
+
+            // Y축 렌더링
+            yAxis.innerHTML = `
+                <span>${maxScore.toFixed(1)}</span>
+                <span>${(maxScore * 0.75).toFixed(1)}</span>
+                <span>${(maxScore * 0.5).toFixed(1)}</span>
+                <span>${(maxScore * 0.25).toFixed(1)}</span>
+                <span>0</span>
+            `;
+
+            // 막대 그래프 렌더링
+            barsArea.innerHTML = videosWithScore.map(({ video, score, views, subscribers }) => {
+                const heightPercent = (score / maxScore) * 100;
+                const videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
+                const title = video.snippet.title;
+                const shortTitle = title.length > 8 ? title.substring(0, 8) + '...' : title;
+
+                return `
+                    <div class="chart-bar-wrapper">
+                        <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" style="width: 100%; height: 100%; display: flex; align-items: flex-end;">
+                            <div class="chart-bar" style="height: ${Math.max(heightPercent, 2)}%;">
+                                <div class="tooltip">
+                                    <strong>${title.substring(0, 30)}${title.length > 30 ? '...' : ''}</strong><br>
+                                    점수: ${score.toFixed(2)}<br>
+                                    조회수: ${formatViews(views)}<br>
+                                    구독자: ${formatSubscribers(subscribers)}
+                                </div>
+                            </div>
+                        </a>
+                        <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" class="chart-label" title="${title}">${shortTitle}</a>
+                        <span class="chart-score">${score.toFixed(1)}</span>
+                    </div>
+                `;
+            }).join('');
+
+            chartContainer.style.display = 'block';
+        }
+
+        // 테이블 렌더링
+        function renderTable() {
+            const tbody = document.getElementById('videoTableBody');
+
+            if (currentVideos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="no-results">검색 결과가 없습니다.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = currentVideos.map(video => {
+                const subscribers = channelSubscribersMap[video.snippet.channelId] || 0;
+                const views = parseInt(video.statistics.viewCount || 0);
+                const duration = formatDuration(video.contentDetails.duration);
+                const publishedAt = formatDate(video.snippet.publishedAt);
+                const videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
+                const thumbnailUrl = video.snippet.thumbnails.medium?.url || video.snippet.thumbnails.default?.url;
+
+                return `
+                    <tr>
+                        <td class="thumbnail-cell">
+                            <img class="thumbnail" src="${thumbnailUrl}" alt="${video.snippet.title}" loading="lazy">
+                        </td>
+                        <td class="title-cell">
+                            <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" title="${video.snippet.title}">
+                                ${video.snippet.title}
+                            </a>
+                        </td>
+                        <td class="channel-cell" title="${video.snippet.channelTitle}">${video.snippet.channelTitle}</td>
+                        <td class="subscribers-cell">${formatSubscribers(subscribers)}</td>
+                        <td class="views-cell">${formatViews(views)}</td>
+                        <td class="duration-cell">${duration}</td>
+                        <td class="date-cell">${publishedAt}</td>
+                        <td class="link-cell">
+                            <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" class="link-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/>
+                                </svg>
+                                보기
+                            </a>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 메인 검색 함수
+        async function search() {
+            const keyword = document.getElementById('keyword').value.trim();
+            if (!keyword) {
+                showError('키워드를 입력해주세요.');
+                return;
+            }
+
+            hideError();
+
+            const loadingContainer = document.getElementById('loadingContainer');
+            const resultsContainer = document.getElementById('resultsContainer');
+
+            loadingContainer.style.display = 'block';
+            resultsContainer.style.display = 'none';
+
+            // 정렬 상태 초기화
+            currentSort = { column: null, direction: 'asc' };
+            document.querySelectorAll('.video-table th.sortable').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+
+            try {
+                // 연관 키워드 조회
+                fetchRelatedKeywords(keyword);
+
+                // 필터 값 가져오기
+                const period = parseInt(document.getElementById('period').value);
+                const duration = document.getElementById('duration').value;
+                const maxSubscribers = document.getElementById('maxSubscribers').value;
+                const minViews = parseInt(document.getElementById('minViews').value);
+                const maxResults = parseInt(document.getElementById('maxResults').value);
+
+                // 영상 검색
+                const searchParams = {
+                    part: 'snippet',
+                    q: keyword,
+                    type: 'video',
+                    order: 'viewCount',
+                    publishedAfter: getPublishedAfter(period),
+                    maxResults: 50,
+                    regionCode: 'KR',
+                    relevanceLanguage: 'ko'
+                };
+
+                const searchResults = await fetchYouTubeAPI('search', searchParams);
+
+                if (!searchResults.items || searchResults.items.length === 0) {
+                    loadingContainer.style.display = 'none';
+                    resultsContainer.style.display = 'block';
+                    document.getElementById('trendChartContainer').style.display = 'none';
+                    currentVideos = [];
+                    renderTable();
+                    document.getElementById('resultsCount').textContent = '0개';
+                    return;
+                }
+
+                // 비디오 ID 목록
+                const videoIds = searchResults.items.map(item => item.id.videoId).join(',');
+
+                // 비디오 상세 정보 조회
+                const videoDetails = await fetchYouTubeAPI('videos', {
+                    part: 'snippet,statistics,contentDetails',
+                    id: videoIds
+                });
+
+                // 채널 ID 목록 (중복 제거)
+                const channelIds = [...new Set(videoDetails.items.map(item => item.snippet.channelId))].join(',');
+
+                // 채널 정보 조회
+                const channelDetails = await fetchYouTubeAPI('channels', {
+                    part: 'statistics',
+                    id: channelIds
+                });
+
+                // 채널 구독자 수 매핑
+                channelSubscribersMap = {};
+                channelDetails.items.forEach(channel => {
+                    channelSubscribersMap[channel.id] = parseInt(channel.statistics.subscriberCount || 0);
+                });
+
+                // 필터링
+                let filteredVideos = videoDetails.items.filter(video => {
+                    const views = parseInt(video.statistics.viewCount || 0);
+                    const minutes = durationToMinutes(video.contentDetails.duration);
+                    const subscribers = channelSubscribersMap[video.snippet.channelId] || 0;
+
+                    // 조회수 필터
+                    if (views < minViews) return false;
+
+                    // 영상 길이 필터
+                    if (duration !== 'any') {
+                        if (duration === '30+') {
+                            if (minutes < 30) return false;
+                        } else {
+                            const maxMinutes = parseInt(duration);
+                            if (minutes > maxMinutes) return false;
+                        }
+                    }
+
+                    // 구독자 상한 필터
+                    if (maxSubscribers !== 'any') {
+                        const maxSubs = parseInt(maxSubscribers);
+                        if (subscribers > maxSubs) return false;
+                    }
+
+                    return true;
+                });
+
+                // 결과 수 제한
+                currentVideos = filteredVideos.slice(0, maxResults);
+
+                // 결과 표시
+                resultsContainer.style.display = 'block';
+                document.getElementById('resultsCount').textContent = `${currentVideos.length}개 결과`;
+                renderTrendChart();
+                renderTable();
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                loadingContainer.style.display = 'none';
+            }
+        }
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            // 저장된 API 키 불러오기
+            const savedApiKey = localStorage.getItem('youtubeApiKey');
+            if (savedApiKey) {
+                document.getElementById('apiKey').value = savedApiKey;
+            }
+
+            // API 키 변경 시 저장
+            document.getElementById('apiKey').addEventListener('change', (e) => {
+                localStorage.setItem('youtubeApiKey', e.target.value);
+            });
+
+            // 테이블 헤더 클릭 이벤트 (정렬)
+            document.querySelectorAll('.video-table th.sortable').forEach(th => {
+                th.addEventListener('click', () => {
+                    const sortKey = th.dataset.sort;
+                    if (sortKey && currentVideos.length > 0) {
+                        sortVideos(sortKey);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
