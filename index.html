@@ -346,94 +346,6 @@
             color: #fff;
         }
 
-        /* 뉴스 트렌드 섹션 */
-        .news-trend {
-            background: #1a1a1a;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .news-trend-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .news-trend-header h3 {
-            font-size: 1rem;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .news-trend-header .period {
-            font-size: 0.8rem;
-            color: #888;
-        }
-
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 12px;
-        }
-
-        .news-item {
-            background: #222;
-            border-radius: 8px;
-            padding: 12px 15px;
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            transition: background 0.2s;
-        }
-
-        .news-item:hover {
-            background: #2a2a2a;
-        }
-
-        .news-item .news-rank {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
-            color: #fff;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .news-item .news-content {
-            flex: 1;
-        }
-
-        .news-item .news-category {
-            font-size: 0.7rem;
-            color: #feca57;
-            margin-bottom: 4px;
-        }
-
-        .news-item .news-title {
-            font-size: 0.85rem;
-            color: #fff;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .news-item .news-meta {
-            font-size: 0.7rem;
-            color: #666;
-            margin-top: 5px;
-        }
-
         .trend-loading {
             text-align: center;
             padding: 30px;
@@ -794,6 +706,32 @@
 
         <div class="filters">
             <div class="filter-group">
+                <label>국가</label>
+                <select id="regionCode">
+                    <option value="KR" selected>한국</option>
+                    <option value="US">미국</option>
+                    <option value="JP">일본</option>
+                    <option value="GB">영국</option>
+                    <option value="DE">독일</option>
+                    <option value="FR">프랑스</option>
+                    <option value="CA">캐나다</option>
+                    <option value="AU">호주</option>
+                    <option value="IN">인도</option>
+                    <option value="BR">브라질</option>
+                    <option value="TW">대만</option>
+                    <option value="TH">태국</option>
+                    <option value="VN">베트남</option>
+                    <option value="ID">인도네시아</option>
+                    <option value="MX">멕시코</option>
+                    <option value="ES">스페인</option>
+                    <option value="IT">이탈리아</option>
+                    <option value="RU">러시아</option>
+                    <option value="PH">필리핀</option>
+                    <option value="SG">싱가포르</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
                 <label>기간</label>
                 <select id="period">
                     <option value="1">1일</option>
@@ -888,22 +826,6 @@
             </div>
         </div>
 
-        <!-- 뉴스 트렌드 -->
-        <div class="news-trend" id="newsTrend">
-            <div class="news-trend-header">
-                <h3>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1dd1a1" stroke-width="2">
-                        <path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2"/>
-                    </svg>
-                    뉴스 트렌드 (최근 3일)
-                </h3>
-                <span class="period">카테고리별 인기 뉴스</span>
-            </div>
-            <div class="news-grid" id="newsGrid">
-                <div class="trend-loading">뉴스 트렌드 로딩 중...</div>
-            </div>
-        </div>
-
         <div class="trend-chart" id="trendChartContainer" style="display: none;">
             <div class="trend-chart-header">
                 <h3>
@@ -992,11 +914,14 @@
                     return;
                 }
 
+                // 선택된 국가 코드 가져오기
+                const regionCode = document.getElementById('regionCode').value;
+
                 // 인기 동영상 가져오기
                 const response = await fetchYouTubeAPI('videos', {
                     part: 'snippet',
                     chart: 'mostPopular',
-                    regionCode: 'KR',
+                    regionCode: regionCode,
                     maxResults: 50
                 });
 
@@ -1075,95 +1000,6 @@
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, count)
                 .map(([kw]) => kw);
-        }
-
-        // 뉴스 트렌드 로드
-        async function loadNewsTrend() {
-            const newsGrid = document.getElementById('newsGrid');
-            newsGrid.innerHTML = '<div class="trend-loading">뉴스 트렌드 로딩 중...</div>';
-
-            try {
-                // 네이버 실시간 검색어 기반 뉴스 키워드 (RSS 대안)
-                const newsCategories = [
-                    {
-                        category: '정치/사회',
-                        keywords: ['국회', '대통령', '선거', '정책', '법안']
-                    },
-                    {
-                        category: '경제/금융',
-                        keywords: ['주식', '부동산', '금리', '환율', '투자']
-                    },
-                    {
-                        category: 'IT/과학',
-                        keywords: ['AI', '반도체', '스마트폰', '자율주행', '메타버스']
-                    },
-                    {
-                        category: '연예/문화',
-                        keywords: ['드라마', '아이돌', '영화', '콘서트', 'K-POP']
-                    },
-                    {
-                        category: '스포츠',
-                        keywords: ['축구', '야구', 'NBA', '올림픽', 'e스포츠']
-                    },
-                    {
-                        category: '생활/건강',
-                        keywords: ['다이어트', '운동', '레시피', '여행', '인테리어']
-                    }
-                ];
-
-                // YouTube에서 뉴스/정치 카테고리 인기 영상으로 트렌드 파악
-                const apiKey = document.getElementById('apiKey').value.trim();
-                if (apiKey) {
-                    try {
-                        const newsVideos = await fetchYouTubeAPI('search', {
-                            part: 'snippet',
-                            type: 'video',
-                            order: 'viewCount',
-                            publishedAfter: getPublishedAfter(3),
-                            maxResults: 20,
-                            regionCode: 'KR',
-                            q: '뉴스 속보'
-                        });
-
-                        if (newsVideos.items && newsVideos.items.length > 0) {
-                            // YouTube 뉴스 기반으로 카테고리 키워드 업데이트
-                            newsVideos.items.forEach((video, idx) => {
-                                const catIdx = idx % newsCategories.length;
-                                const keyword = extractKeywords(video.snippet.title)[0];
-                                if (keyword && !newsCategories[catIdx].keywords.includes(keyword)) {
-                                    newsCategories[catIdx].keywords.unshift(keyword);
-                                }
-                            });
-                        }
-                    } catch (e) {
-                        console.log('뉴스 영상 로드 실패, 기본 키워드 사용');
-                    }
-                }
-
-                // 뉴스 아이템 렌더링
-                let rank = 1;
-                const newsItems = newsCategories.flatMap(cat =>
-                    cat.keywords.slice(0, 2).map(keyword => ({
-                        category: cat.category,
-                        keyword: keyword,
-                        rank: rank++
-                    }))
-                ).slice(0, 12);
-
-                newsGrid.innerHTML = newsItems.map(item => `
-                    <div class="news-item" onclick="searchWithKeyword('${item.keyword}')">
-                        <div class="news-rank">${item.rank}</div>
-                        <div class="news-content">
-                            <div class="news-category">${item.category}</div>
-                            <div class="news-title">${item.keyword} 관련 콘텐츠</div>
-                            <div class="news-meta">클릭하여 관련 영상 검색</div>
-                        </div>
-                    </div>
-                `).join('');
-
-            } catch (error) {
-                newsGrid.innerHTML = `<div class="trend-loading">뉴스 로드 실패: ${error.message}</div>`;
-            }
         }
 
         // YouTube API 호출 함수
@@ -1533,6 +1369,16 @@
                 const maxSubscribers = document.getElementById('maxSubscribers').value;
                 const minViews = parseInt(document.getElementById('minViews').value);
                 const maxResults = parseInt(document.getElementById('maxResults').value);
+                const regionCode = document.getElementById('regionCode').value;
+
+                // 국가별 언어 매핑
+                const regionLanguageMap = {
+                    'KR': 'ko', 'US': 'en', 'JP': 'ja', 'GB': 'en', 'DE': 'de',
+                    'FR': 'fr', 'CA': 'en', 'AU': 'en', 'IN': 'en', 'BR': 'pt',
+                    'TW': 'zh', 'TH': 'th', 'VN': 'vi', 'ID': 'id', 'MX': 'es',
+                    'ES': 'es', 'IT': 'it', 'RU': 'ru', 'PH': 'en', 'SG': 'en'
+                };
+                const relevanceLanguage = regionLanguageMap[regionCode] || 'en';
 
                 // 영상 검색
                 const searchParams = {
@@ -1542,8 +1388,8 @@
                     order: 'viewCount',
                     publishedAfter: getPublishedAfter(period),
                     maxResults: 50,
-                    regionCode: 'KR',
-                    relevanceLanguage: 'ko'
+                    regionCode: regionCode,
+                    relevanceLanguage: relevanceLanguage
                 };
 
                 const searchResults = await fetchYouTubeAPI('search', searchParams);
@@ -1752,9 +1598,13 @@
                 });
             });
 
+            // 국가 선택 변경 시 트렌드 데이터 갱신
+            document.getElementById('regionCode').addEventListener('change', () => {
+                loadTrendKeywords();
+            });
+
             // 페이지 로드 시 트렌드 데이터 자동 로드
             loadTrendKeywords();
-            loadNewsTrend();
         });
     </script>
 </body>
