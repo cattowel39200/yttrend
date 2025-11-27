@@ -5884,6 +5884,8 @@
 
         // 조회수 포맷
         function formatViews(count) {
+            if (count === undefined || count === null) return '0';
+            count = Number(count) || 0;
             if (count >= 100000000) {
                 return (count / 100000000).toFixed(1) + '억';
             } else if (count >= 10000) {
