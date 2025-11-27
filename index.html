@@ -5547,7 +5547,7 @@
             const container = document.getElementById('savedHelperContent');
             if (!container) return;
 
-            const titles = contentAnalysis.titles;
+            const titles = contentHelperData.titles;
             const patterns = analyzeTitlePatterns(titles);
 
             container.innerHTML = `
@@ -5601,7 +5601,7 @@
                 <div style="margin-top:20px;">
                     <h3 style="color:#feca57;margin-bottom:15px;">저장한 영상 썸네일</h3>
                     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px;">
-                        ${contentAnalysis.thumbnails.slice(0, 20).map(thumb => `
+                        ${contentHelperData.thumbnails.slice(0, 20).map(thumb => `
                             <div style="background:#252525;border-radius:10px;overflow:hidden;">
                                 <img src="${thumb.url}" alt="썸네일" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
                                 <div style="padding:10px;">
@@ -5621,7 +5621,7 @@
             if (!container) return;
 
             const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-            const timingData = contentAnalysis.uploadTimes;
+            const timingData = contentHelperData.uploadTimes;
 
             container.innerHTML = `
                 <div style="margin-top:20px;">
@@ -6056,22 +6056,26 @@
             // 높은 조회수 패턴
             const sortedByViews = [...titles].sort((a, b) => b.views - a.views).slice(0, 5);
             const highViewTitles = document.getElementById('highViewTitles');
-            highViewTitles.innerHTML = sortedByViews.map(t => `
-                <div class="template-item" onclick="copyToClipboard('${escapeHtml(t.title)}')">
-                    <span class="template-text">${escapeHtml(t.title)}</span>
-                    <span class="template-views">${formatViews(t.views)} 조회</span>
-                </div>
-            `).join('') || '<div class="template-loading">데이터 없음</div>';
+            if (highViewTitles) {
+                highViewTitles.innerHTML = sortedByViews.map(t => `
+                    <div class="template-item" onclick="copyToClipboard('${escapeHtml(t.title)}')">
+                        <span class="template-text">${escapeHtml(t.title)}</span>
+                        <span class="template-views">${formatViews(t.views)} 조회</span>
+                    </div>
+                `).join('') || '<div class="template-loading">데이터 없음</div>';
+            }
 
             // 트렌드 패턴 (최신 영상)
             const sortedByDate = [...titles].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
             const trendTitles = document.getElementById('trendTitles');
-            trendTitles.innerHTML = sortedByDate.map(t => `
-                <div class="template-item" onclick="copyToClipboard('${escapeHtml(t.title)}')">
-                    <span class="template-text">${escapeHtml(t.title)}</span>
-                    <span class="template-views">${formatViews(t.views)} 조회</span>
-                </div>
-            `).join('') || '<div class="template-loading">데이터 없음</div>';
+            if (trendTitles) {
+                trendTitles.innerHTML = sortedByDate.map(t => `
+                    <div class="template-item" onclick="copyToClipboard('${escapeHtml(t.title)}')">
+                        <span class="template-text">${escapeHtml(t.title)}</span>
+                        <span class="template-views">${formatViews(t.views)} 조회</span>
+                    </div>
+                `).join('') || '<div class="template-loading">데이터 없음</div>';
+            }
 
             // 추천 제목 조합 생성
             generateSuggestedTitles();
@@ -6160,32 +6164,40 @@
                 .slice(0, 30);
 
             // 통계 업데이트
-            document.getElementById('analyzedVideoCount').textContent = contentHelperData.videos.length;
-            document.getElementById('extractedTagCount').textContent = Object.keys(tags).length;
-            document.getElementById('highFreqTagCount').textContent = sortedTags.filter(([_, count]) => count >= 3).length;
+            const analyzedVideoCount = document.getElementById('analyzedVideoCount');
+            const extractedTagCount = document.getElementById('extractedTagCount');
+            const highFreqTagCount = document.getElementById('highFreqTagCount');
+
+            if (analyzedVideoCount) analyzedVideoCount.textContent = contentHelperData.videos.length;
+            if (extractedTagCount) extractedTagCount.textContent = Object.keys(tags).length;
+            if (highFreqTagCount) highFreqTagCount.textContent = sortedTags.filter(([_, count]) => count >= 3).length;
 
             // 추천 태그 렌더링
             currentRecommendedTags = sortedTags.map(([tag, _]) => tag);
             const recommendedTags = document.getElementById('recommendedTags');
-            recommendedTags.innerHTML = sortedTags.map(([tag, count]) => `
-                <span class="recommended-tag" onclick="copyToClipboard('${escapeHtml(tag)}')" title="사용 빈도: ${count}회">
-                    ${escapeHtml(tag)}
-                    <span class="tag-count">${count}</span>
-                </span>
-            `).join('') || '<div class="template-loading">태그 데이터 없음</div>';
+            if (recommendedTags) {
+                recommendedTags.innerHTML = sortedTags.map(([tag, count]) => `
+                    <span class="recommended-tag" onclick="copyToClipboard('${escapeHtml(tag)}')" title="사용 빈도: ${count}회">
+                        ${escapeHtml(tag)}
+                        <span class="tag-count">${count}</span>
+                    </span>
+                `).join('') || '<div class="template-loading">태그 데이터 없음</div>';
+            }
 
             // 빈도 차트 렌더링
             const maxCount = sortedTags.length > 0 ? sortedTags[0][1] : 1;
             const tagFrequencyBars = document.getElementById('tagFrequencyBars');
-            tagFrequencyBars.innerHTML = sortedTags.slice(0, 10).map(([tag, count]) => `
-                <div class="frequency-bar-item">
-                    <span class="freq-tag">${escapeHtml(tag)}</span>
-                    <div class="freq-bar-container">
-                        <div class="freq-bar-fill" style="width: ${(count / maxCount) * 100}%"></div>
+            if (tagFrequencyBars) {
+                tagFrequencyBars.innerHTML = sortedTags.slice(0, 10).map(([tag, count]) => `
+                    <div class="frequency-bar-item">
+                        <span class="freq-tag">${escapeHtml(tag)}</span>
+                        <div class="freq-bar-container">
+                            <div class="freq-bar-fill" style="width: ${(count / maxCount) * 100}%"></div>
+                        </div>
+                        <span class="freq-count">${count}</span>
                     </div>
-                    <span class="freq-count">${count}</span>
-                </div>
-            `).join('') || '<div class="template-loading">태그 데이터 없음</div>';
+                `).join('') || '<div class="template-loading">태그 데이터 없음</div>';
+            }
         }
 
         // 전체 태그 복사
@@ -6211,14 +6223,16 @@
             thumbnails = thumbnails.slice(0, 12);
 
             const gallery = document.getElementById('thumbnailGallery');
-            gallery.innerHTML = thumbnails.map(t => `
-                <div class="thumbnail-item" onclick="window.open('https://youtube.com/watch?v=${t.videoId}', '_blank')">
-                    <img src="${t.url}" alt="${escapeHtml(t.title)}">
-                    <div class="thumbnail-overlay">
-                        <span class="thumb-views">${formatNumber(t.views)} 조회</span>
+            if (gallery) {
+                gallery.innerHTML = thumbnails.map(t => `
+                    <div class="thumbnail-item" onclick="window.open('https://youtube.com/watch?v=${t.videoId}', '_blank')">
+                        <img src="${t.url}" alt="${escapeHtml(t.title)}">
+                        <div class="thumbnail-overlay">
+                            <span class="thumb-views">${formatNumber(t.views)} 조회</span>
+                        </div>
                     </div>
-                </div>
-            `).join('') || '<div class="template-loading">썸네일 없음</div>';
+                `).join('') || '<div class="template-loading">썸네일 없음</div>';
+            }
 
             // 인사이트 생성
             renderThumbnailInsights(thumbnails);
@@ -6235,6 +6249,8 @@
         // 썸네일 인사이트
         function renderThumbnailInsights(thumbnails) {
             const insights = document.getElementById('thumbnailInsights');
+            if (!insights) return;
+
             const avgViews = thumbnails.length > 0
                 ? Math.round(thumbnails.reduce((sum, t) => sum + t.views, 0) / thumbnails.length)
                 : 0;
@@ -6267,40 +6283,44 @@
                 const count = weekday[day] || 0;
                 const fill = bar.querySelector('.bar-fill');
                 const value = bar.querySelector('.bar-value');
-                fill.style.height = `${(count / maxWeekday) * 100}%`;
-                value.textContent = count;
+                if (fill) fill.style.height = `${(count / maxWeekday) * 100}%`;
+                if (value) value.textContent = count;
             });
 
             // 시간대별 차트
             const maxHourly = Math.max(...Object.values(hourly), 1);
             const hourlyChart = document.getElementById('hourlyChart');
-            hourlyChart.innerHTML = Object.entries(hourly).map(([hour, count]) => `
-                <div class="hourly-bar" data-hour="${hour}">
-                    <div class="hourly-bar-fill" style="height: ${(count / maxHourly) * 100}%"></div>
-                    <span class="hour-label">${hour}</span>
-                </div>
-            `).join('');
+            if (hourlyChart) {
+                hourlyChart.innerHTML = Object.entries(hourly).map(([hour, count]) => `
+                    <div class="hourly-bar" data-hour="${hour}">
+                        <div class="hourly-bar-fill" style="height: ${(count / maxHourly) * 100}%"></div>
+                        <span class="hour-label">${hour}</span>
+                    </div>
+                `).join('');
+            }
 
             // 추천 시간 계산
             const bestWeekday = Object.entries(weekday).sort((a, b) => b[1] - a[1])[0];
             const bestHour = Object.entries(hourly).sort((a, b) => b[1] - a[1])[0];
 
             const recommend = document.getElementById('optimalTimeRecommend');
-            recommend.innerHTML = `
-                <div class="recommend-item">
-                    <span class="recommend-label">추천 요일</span>
-                    <span class="recommend-value">${bestWeekday[0]}요일</span>
-                    <span class="recommend-note">(${bestWeekday[1]}개 영상 업로드됨)</span>
-                </div>
-                <div class="recommend-item">
-                    <span class="recommend-label">추천 시간대</span>
-                    <span class="recommend-value">${bestHour[0]}시</span>
-                    <span class="recommend-note">(${bestHour[1]}개 영상 업로드됨)</span>
-                </div>
-                <div class="recommend-summary">
-                    💡 <strong>${bestWeekday[0]}요일 ${bestHour[0]}시</strong>에 업로드하는 것을 추천합니다
-                </div>
-            `;
+            if (recommend && bestWeekday && bestHour) {
+                recommend.innerHTML = `
+                    <div class="recommend-item">
+                        <span class="recommend-label">추천 요일</span>
+                        <span class="recommend-value">${bestWeekday[0]}요일</span>
+                        <span class="recommend-note">(${bestWeekday[1]}개 영상 업로드됨)</span>
+                    </div>
+                    <div class="recommend-item">
+                        <span class="recommend-label">추천 시간대</span>
+                        <span class="recommend-value">${bestHour[0]}시</span>
+                        <span class="recommend-note">(${bestHour[1]}개 영상 업로드됨)</span>
+                    </div>
+                    <div class="recommend-summary">
+                        💡 <strong>${bestWeekday[0]}요일 ${bestHour[0]}시</strong>에 업로드하는 것을 추천합니다
+                    </div>
+                `;
+            }
         }
 
         // 영상 길이 분석 렌더링
@@ -6315,30 +6335,34 @@
                 const count = lengths[range] || 0;
                 const fill = bar.querySelector('.length-bar-fill');
                 const value = bar.querySelector('.length-value');
-                fill.style.height = `${(count / maxLength) * 100}%`;
-                value.textContent = count;
+                if (fill) fill.style.height = `${(count / maxLength) * 100}%`;
+                if (value) value.textContent = count;
             });
 
             // 통계 계산
             const videosWithDuration = videos.filter(v => v.durationSeconds > 0);
+            const avgVideoLengthEl = document.getElementById('avgVideoLength');
+            const highViewAvgLengthEl = document.getElementById('highViewAvgLength');
+            const recommendedLengthEl = document.getElementById('recommendedLength');
+
             if (videosWithDuration.length === 0) {
-                document.getElementById('avgVideoLength').textContent = '-';
-                document.getElementById('highViewAvgLength').textContent = '-';
-                document.getElementById('recommendedLength').textContent = '-';
+                if (avgVideoLengthEl) avgVideoLengthEl.textContent = '-';
+                if (highViewAvgLengthEl) highViewAvgLengthEl.textContent = '-';
+                if (recommendedLengthEl) recommendedLengthEl.textContent = '-';
                 return;
             }
 
             const avgSeconds = videosWithDuration.reduce((sum, v) => sum + v.durationSeconds, 0) / videosWithDuration.length;
-            document.getElementById('avgVideoLength').textContent = formatDuration(Math.round(avgSeconds));
+            if (avgVideoLengthEl) avgVideoLengthEl.textContent = formatDuration(Math.round(avgSeconds));
 
             // 고조회수 영상 (상위 25%)
             const sortedByViews = [...videosWithDuration].sort((a, b) => b.views - a.views);
             const topVideos = sortedByViews.slice(0, Math.ceil(sortedByViews.length * 0.25));
             const highViewAvg = topVideos.reduce((sum, v) => sum + v.durationSeconds, 0) / topVideos.length;
-            document.getElementById('highViewAvgLength').textContent = formatDuration(Math.round(highViewAvg));
+            if (highViewAvgLengthEl) highViewAvgLengthEl.textContent = formatDuration(Math.round(highViewAvg));
 
             // 추천 길이 (고조회수 영상 기준)
-            document.getElementById('recommendedLength').textContent = formatDuration(Math.round(highViewAvg));
+            if (recommendedLengthEl) recommendedLengthEl.textContent = formatDuration(Math.round(highViewAvg));
 
             // 인사이트 생성
             const mostCommonRange = Object.entries(lengths).sort((a, b) => b[1] - a[1])[0];
@@ -6350,11 +6374,14 @@
                 'long': '매우 긴 영상 (20분 이상)'
             };
 
-            document.getElementById('lengthInsightText').innerHTML = `
-                이 키워드에서 가장 많이 사용되는 영상 길이는 <strong>${rangeNames[mostCommonRange[0]]}</strong>입니다 (${mostCommonRange[1]}개 영상).<br><br>
-                고조회수 영상의 평균 길이는 <strong>${formatDuration(Math.round(highViewAvg))}</strong>이므로,
-                이 정도 길이로 제작하는 것을 권장합니다.
-            `;
+            const lengthInsightText = document.getElementById('lengthInsightText');
+            if (lengthInsightText && mostCommonRange) {
+                lengthInsightText.innerHTML = `
+                    이 키워드에서 가장 많이 사용되는 영상 길이는 <strong>${rangeNames[mostCommonRange[0]]}</strong>입니다 (${mostCommonRange[1]}개 영상).<br><br>
+                    고조회수 영상의 평균 길이는 <strong>${formatDuration(Math.round(highViewAvg))}</strong>이므로,
+                    이 정도 길이로 제작하는 것을 권장합니다.
+                `;
+            }
         }
 
         // 초 단위를 시:분:초로 변환
