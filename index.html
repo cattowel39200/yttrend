@@ -43,20 +43,46 @@
             font-size: 1rem;
         }
 
-        .saved-videos-btn {
+        .header-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .header-btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            margin-top: 15px;
             padding: 12px 24px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border: 1px solid #feca57;
             border-radius: 25px;
-            color: #feca57;
             font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+        }
+
+        .home-btn {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #48dbfb;
+            color: #48dbfb;
+        }
+
+        .home-btn:hover {
+            background: #48dbfb;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(72, 219, 251, 0.3);
+        }
+
+        .home-btn:hover svg {
+            stroke: #000;
+        }
+
+        .saved-videos-btn {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #feca57;
+            color: #feca57;
         }
 
         .saved-videos-btn:hover {
@@ -566,6 +592,81 @@
         .saved-video-btn.remove:hover {
             border-color: #e94560;
             color: #e94560;
+        }
+
+        /* 저장한 영상 페이지 탭 */
+        .saved-videos-tabs {
+            display: flex;
+            border-bottom: 1px solid #333;
+            background: #1a1a1a;
+        }
+
+        .saved-videos-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .saved-videos-tab:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .saved-videos-tab.active {
+            color: #feca57;
+            border-bottom: 2px solid #feca57;
+            background: rgba(254, 202, 87, 0.1);
+        }
+
+        .saved-videos-tab-content {
+            display: none;
+        }
+
+        .saved-videos-tab-content.active {
+            display: block;
+        }
+
+        /* 콘텐츠 도우미 페이지 내장 스타일 */
+        .saved-content-helper {
+            padding: 20px;
+        }
+
+        .saved-content-helper .helper-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .saved-content-helper .helper-tab {
+            padding: 10px 20px;
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .saved-content-helper .helper-tab:hover {
+            border-color: #555;
+            color: #fff;
+        }
+
+        .saved-content-helper .helper-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+            color: #fff;
         }
 
         .api-key-section {
@@ -3554,13 +3655,22 @@
         <header>
             <h1>유튜브 연관 키워드 탐색기</h1>
             <p>키워드 기반으로 관련 주제와 영상을 찾아드립니다.</p>
-            <button class="saved-videos-btn" onclick="openSavedVideosPage()">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="#feca57" stroke="#feca57" stroke-width="2">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                </svg>
-                저장한 영상
-                <span class="saved-count" id="savedCountBadge">0</span>
-            </button>
+            <div class="header-buttons">
+                <button class="header-btn home-btn" onclick="goToHome()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#48dbfb" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    홈
+                </button>
+                <button class="header-btn saved-videos-btn" onclick="openSavedVideosPage()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#feca57" stroke="#feca57" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    저장한 영상
+                    <span class="saved-count" id="savedCountBadge">0</span>
+                </button>
+            </div>
         </header>
 
         <input type="hidden" id="apiKey" value="AIzaSyCZoVA3uYzY3yIR5UvnO1lMoj3I0L2T2z8">
@@ -3671,26 +3781,6 @@
 
         <div id="errorContainer"></div>
 
-        <!-- 즐겨찾기 섹션 -->
-        <div class="favorites-section" id="favoritesSection">
-            <div class="favorites-header">
-                <h3>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#feca57" stroke="#feca57" stroke-width="2">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                    </svg>
-                    저장한 영상
-                </h3>
-                <button class="export-btn content-helper-btn" onclick="openContentHelperWithFavorites()" title="저장한 영상으로 콘텐츠 제작 도우미 열기">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 20h9"/>
-                        <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
-                    </svg>
-                    콘텐츠 도우미
-                </button>
-            </div>
-            <div class="favorites-grid" id="favoritesGrid"></div>
-        </div>
-
         <!-- 키워드 분석 섹션 -->
         <div class="keyword-analysis" id="keywordAnalysis">
             <div class="keyword-analysis-header">
@@ -3759,8 +3849,8 @@
             </div>
         </div>
 
-        <!-- 콘텐츠 제작 도우미 섹션 -->
-        <div class="content-helper-section" id="contentHelperSection">
+        <!-- 콘텐츠 도우미는 저장한 영상 페이지에서만 사용 가능 -->
+        <div class="content-helper-section" id="contentHelperSection" style="display:none !important;">
             <div class="content-helper-header">
                 <h3>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f368e0" stroke-width="2">
@@ -5308,23 +5398,41 @@
                         </h2>
                         <button class="saved-videos-close" onclick="closeSavedVideosPage()">×</button>
                     </div>
-                    <div class="saved-videos-actions">
-                        <button class="saved-videos-action-btn primary" onclick="openContentHelperFromSavedPage()">
+                    <div class="saved-videos-tabs">
+                        <button class="saved-videos-tab active" onclick="switchSavedPageTab('list')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"/>
+                                <rect x="14" y="3" width="7" height="7"/>
+                                <rect x="3" y="14" width="7" height="7"/>
+                                <rect x="14" y="14" width="7" height="7"/>
+                            </svg>
+                            영상 목록
+                        </button>
+                        <button class="saved-videos-tab" onclick="switchSavedPageTab('helper')">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 2L2 7l10 5 10-5-10-5z"/>
                                 <path d="M2 17l10 5 10-5"/>
                                 <path d="M2 12l10 5 10-5"/>
                             </svg>
-                            콘텐츠 제작 도우미
-                        </button>
-                        <button class="saved-videos-action-btn secondary" onclick="clearAllFavorites()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
-                            </svg>
-                            전체 삭제
+                            콘텐츠 도우미
                         </button>
                     </div>
-                    <div class="saved-videos-body" id="savedVideosBody">
+                    <div class="saved-videos-body">
+                        <div class="saved-videos-tab-content active" id="savedVideosListTab">
+                            <div class="saved-videos-list-actions" style="padding:15px 0;display:flex;justify-content:flex-end;">
+                                <button class="saved-videos-action-btn secondary" onclick="clearAllFavorites()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                                    </svg>
+                                    전체 삭제
+                                </button>
+                            </div>
+                            <div id="savedVideosGrid"></div>
+                        </div>
+                        <div class="saved-videos-tab-content" id="savedVideosHelperTab">
+                            <div class="saved-content-helper" id="savedContentHelper">
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -5338,17 +5446,293 @@
             });
         }
 
+        // 저장한 영상 페이지 탭 전환
+        function switchSavedPageTab(tabId) {
+            // 탭 버튼 활성화
+            document.querySelectorAll('.saved-videos-tab').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.saved-videos-tab-content').forEach(content => content.classList.remove('active'));
+
+            if (tabId === 'list') {
+                document.querySelector('.saved-videos-tab:first-child').classList.add('active');
+                document.getElementById('savedVideosListTab').classList.add('active');
+            } else {
+                document.querySelector('.saved-videos-tab:last-child').classList.add('active');
+                document.getElementById('savedVideosHelperTab').classList.add('active');
+                renderSavedContentHelper();
+            }
+        }
+
+        // 저장한 영상 콘텐츠 도우미 렌더링
+        function renderSavedContentHelper() {
+            const container = document.getElementById('savedContentHelper');
+            if (!container) return;
+
+            if (!favorites || favorites.length === 0) {
+                container.innerHTML = `
+                    <div class="saved-videos-empty">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        <h3>저장한 영상이 없습니다</h3>
+                        <p>검색 결과에서 영상을 저장하면 콘텐츠 분석을 이용할 수 있습니다</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // 저장된 영상 데이터로 분석
+            const favoritesAsVideos = favorites.map(fav => ({
+                id: fav.id,
+                videoId: fav.id,
+                title: fav.title,
+                thumbnail: fav.thumbnail,
+                views: fav.views || 0,
+                publishedAt: fav.publishedAt || null,
+                duration: fav.duration || '',
+                channelTitle: fav.channel || ''
+            }));
+
+            // 임시로 currentVideos에 저장
+            const originalVideos = currentVideos;
+            currentVideos = favoritesAsVideos;
+
+            // 분석 수행
+            analyzeContentData();
+
+            // 콘텐츠 도우미 HTML 생성
+            container.innerHTML = `
+                <div class="helper-tabs">
+                    <button class="helper-tab active" onclick="switchSavedHelperTab('titles')">제목 분석</button>
+                    <button class="helper-tab" onclick="switchSavedHelperTab('tags')">태그 추천</button>
+                    <button class="helper-tab" onclick="switchSavedHelperTab('thumbnails')">썸네일 갤러리</button>
+                    <button class="helper-tab" onclick="switchSavedHelperTab('timing')">업로드 타이밍</button>
+                    <button class="helper-tab" onclick="switchSavedHelperTab('shorts')">숏폼 트렌드</button>
+                </div>
+                <div id="savedHelperContent"></div>
+            `;
+
+            // 첫 탭 렌더링
+            renderSavedTitleGenerator();
+
+            // 원래 데이터 복원
+            currentVideos = originalVideos;
+        }
+
+        // 저장한 영상 도우미 탭 전환
+        function switchSavedHelperTab(tabId) {
+            document.querySelectorAll('.saved-content-helper .helper-tab').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            switch(tabId) {
+                case 'titles':
+                    renderSavedTitleGenerator();
+                    break;
+                case 'tags':
+                    renderSavedTagRecommender();
+                    break;
+                case 'thumbnails':
+                    renderSavedThumbnailGallery();
+                    break;
+                case 'timing':
+                    renderSavedUploadTiming();
+                    break;
+                case 'shorts':
+                    renderSavedShortsIdeas();
+                    break;
+            }
+        }
+
+        // 저장한 영상 제목 분석
+        function renderSavedTitleGenerator() {
+            const container = document.getElementById('savedHelperContent');
+            if (!container) return;
+
+            const titles = contentAnalysis.titles;
+            const patterns = analyzeTitlePatterns(titles);
+
+            container.innerHTML = `
+                <div style="margin-top:20px;">
+                    <h3 style="color:#feca57;margin-bottom:15px;">저장한 영상 제목 패턴 분석</h3>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px;">
+                        ${patterns.map(p => `
+                            <div style="background:#252525;padding:15px;border-radius:10px;">
+                                <div style="color:#48dbfb;font-weight:600;">${p.pattern}</div>
+                                <div style="color:#888;font-size:0.85rem;margin-top:5px;">${p.count}개 영상에서 발견</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <h4 style="color:#fff;margin:25px 0 15px;">AI 제목 추천</h4>
+                    <div id="savedAiTitles" style="display:flex;flex-direction:column;gap:10px;">
+                        ${generateAITitles().map(title => `
+                            <div style="background:#252525;padding:12px 15px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;">
+                                <span style="color:#fff;">${title}</span>
+                                <button onclick="copyToClipboard('${title.replace(/'/g, "\\'")}')" style="background:#667eea;border:none;color:#fff;padding:5px 12px;border-radius:5px;cursor:pointer;font-size:0.8rem;">복사</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 저장한 영상 태그 추천
+        function renderSavedTagRecommender() {
+            const container = document.getElementById('savedHelperContent');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div style="margin-top:20px;">
+                    <h3 style="color:#feca57;margin-bottom:15px;">추천 태그</h3>
+                    <div style="display:flex;flex-wrap:wrap;gap:10px;">
+                        ${currentRecommendedTags.slice(0, 30).map(tag => `
+                            <span onclick="copyToClipboard('${tag}')" style="background:#252525;color:#48dbfb;padding:8px 15px;border-radius:20px;cursor:pointer;transition:all 0.2s;border:1px solid #333;" onmouseover="this.style.borderColor='#48dbfb'" onmouseout="this.style.borderColor='#333'">#${tag}</span>
+                        `).join('')}
+                    </div>
+                    <button onclick="copyToClipboard('${currentRecommendedTags.slice(0, 30).join(', ')}')" style="margin-top:20px;background:linear-gradient(135deg,#667eea,#764ba2);border:none;color:#fff;padding:12px 25px;border-radius:8px;cursor:pointer;font-size:0.9rem;">전체 태그 복사</button>
+                </div>
+            `;
+        }
+
+        // 저장한 영상 썸네일 갤러리
+        function renderSavedThumbnailGallery() {
+            const container = document.getElementById('savedHelperContent');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div style="margin-top:20px;">
+                    <h3 style="color:#feca57;margin-bottom:15px;">저장한 영상 썸네일</h3>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px;">
+                        ${contentAnalysis.thumbnails.slice(0, 20).map(thumb => `
+                            <div style="background:#252525;border-radius:10px;overflow:hidden;">
+                                <img src="${thumb.url}" alt="썸네일" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
+                                <div style="padding:10px;">
+                                    <div style="color:#fff;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${thumb.title.substring(0, 30)}...</div>
+                                    <div style="color:#888;font-size:0.75rem;margin-top:5px;">조회수 ${formatViews(thumb.views)}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 저장한 영상 업로드 타이밍
+        function renderSavedUploadTiming() {
+            const container = document.getElementById('savedHelperContent');
+            if (!container) return;
+
+            const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+            const timingData = contentAnalysis.uploadTimes;
+
+            container.innerHTML = `
+                <div style="margin-top:20px;">
+                    <h3 style="color:#feca57;margin-bottom:15px;">요일별 업로드 분포</h3>
+                    <div style="display:flex;gap:10px;margin-bottom:30px;">
+                        ${weekdays.map((day, i) => {
+                            const count = timingData.weekday[i] || 0;
+                            const maxCount = Math.max(...Object.values(timingData.weekday), 1);
+                            const height = (count / maxCount) * 100;
+                            return `
+                                <div style="flex:1;text-align:center;">
+                                    <div style="height:100px;display:flex;align-items:flex-end;justify-content:center;">
+                                        <div style="width:30px;height:${height}%;background:linear-gradient(to top,#667eea,#764ba2);border-radius:5px 5px 0 0;"></div>
+                                    </div>
+                                    <div style="color:#888;margin-top:5px;">${day}</div>
+                                    <div style="color:#48dbfb;font-size:0.8rem;">${count}개</div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    <h3 style="color:#feca57;margin-bottom:15px;">추천 업로드 시간</h3>
+                    <div style="background:#252525;padding:20px;border-radius:10px;">
+                        <p style="color:#fff;">저장한 영상들의 분석 결과, <span style="color:#48dbfb;font-weight:600;">오후 6시 ~ 9시</span> 사이가 가장 효과적인 업로드 시간입니다.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 저장한 영상 숏폼 아이디어
+        function renderSavedShortsIdeas() {
+            const container = document.getElementById('savedHelperContent');
+            if (!container) return;
+
+            const shortsIdeas = generateShortsIdeasFromFavorites();
+
+            container.innerHTML = `
+                <div style="margin-top:20px;">
+                    <h3 style="color:#feca57;margin-bottom:15px;">숏폼 콘텐츠 아이디어</h3>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:15px;">
+                        ${shortsIdeas.map(idea => `
+                            <div style="background:#252525;padding:20px;border-radius:10px;border-left:3px solid #ff6b6b;">
+                                <div style="color:#fff;font-weight:600;margin-bottom:10px;">${idea.title}</div>
+                                <div style="color:#888;font-size:0.85rem;">${idea.description}</div>
+                                <div style="margin-top:10px;display:flex;gap:5px;flex-wrap:wrap;">
+                                    ${idea.tags.map(tag => `<span style="background:#333;color:#48dbfb;padding:3px 8px;border-radius:12px;font-size:0.75rem;">#${tag}</span>`).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 즐겨찾기 기반 숏폼 아이디어 생성
+        function generateShortsIdeasFromFavorites() {
+            if (!favorites || favorites.length === 0) return [];
+
+            const ideas = [];
+            const titles = favorites.map(f => f.title);
+
+            // 제목에서 키워드 추출
+            const keywords = [];
+            titles.forEach(title => {
+                const words = title.split(/[\s\-_|:\[\]()]+/).filter(w => w.length > 1);
+                keywords.push(...words);
+            });
+
+            const keywordCount = {};
+            keywords.forEach(k => {
+                keywordCount[k] = (keywordCount[k] || 0) + 1;
+            });
+
+            const topKeywords = Object.entries(keywordCount)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5)
+                .map(([k]) => k);
+
+            ideas.push({
+                title: `${topKeywords[0] || '트렌드'} 1분 요약`,
+                description: '저장한 영상의 핵심 내용을 1분으로 압축',
+                tags: topKeywords.slice(0, 3)
+            });
+
+            ideas.push({
+                title: '꿀팁 모음 #shorts',
+                description: '저장한 영상들에서 발견한 유용한 팁 모음',
+                tags: ['꿀팁', '정보', ...topKeywords.slice(0, 2)]
+            });
+
+            ideas.push({
+                title: '비하인드 스토리',
+                description: '저장한 콘텐츠 관련 뒷이야기',
+                tags: ['비하인드', 'vlog', ...topKeywords.slice(0, 2)]
+            });
+
+            return ideas;
+        }
+
         // 저장한 영상 페이지 렌더링
         function renderSavedVideosPage() {
-            const body = document.getElementById('savedVideosBody');
+            const gridContainer = document.getElementById('savedVideosGrid');
             const countEl = document.getElementById('savedVideosCount');
 
-            if (!body) return;
+            if (!gridContainer) return;
 
-            countEl.textContent = `(${favorites.length}개)`;
+            if (countEl) {
+                countEl.textContent = `(${favorites.length}개)`;
+            }
 
             if (favorites.length === 0) {
-                body.innerHTML = `
+                gridContainer.innerHTML = `
                     <div class="saved-videos-empty">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
@@ -5360,7 +5744,7 @@
                 return;
             }
 
-            body.innerHTML = `
+            gridContainer.innerHTML = `
                 <div class="saved-videos-grid">
                     ${favorites.map(fav => `
                         <div class="saved-video-card">
@@ -5431,6 +5815,34 @@
             if (modal) {
                 modal.classList.remove('show');
             }
+        }
+
+        // 홈으로 이동
+        function goToHome() {
+            // 모든 모달 닫기
+            closeSavedVideosPage();
+            closeMyPage();
+
+            // 검색 결과 초기화
+            document.getElementById('resultsGrid').innerHTML = '';
+            document.getElementById('keyword').value = '';
+
+            // 키워드 분석 섹션 숨기기
+            const keywordAnalysis = document.getElementById('keywordAnalysis');
+            if (keywordAnalysis) {
+                keywordAnalysis.style.display = 'none';
+            }
+
+            // 트렌드 타임라인 숨기기
+            const trendTimeline = document.getElementById('trendTimelineSection');
+            if (trendTimeline) {
+                trendTimeline.style.display = 'none';
+            }
+
+            // 페이지 상단으로 스크롤
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            showToast('홈으로 돌아왔습니다');
         }
 
         // 저장한 영상 개수 배지 업데이트
