@@ -1801,17 +1801,18 @@
             }
         }
 
-        // 실제 검색 결과에서 연관 키워드 추출
+        // 영상 태그 기반 연관 키워드 추출
         async function getYouTubeSuggestions(keyword) {
             const regionCode = document.getElementById('regionCode').value;
+            const lowerKeyword = keyword.toLowerCase();
 
             try {
-                // 검색 결과에서 영상 제목 가져오기
+                // 검색 결과에서 영상 가져오기
                 const searchResult = await fetchYouTubeAPI('search', {
                     part: 'snippet',
                     q: keyword,
                     type: 'video',
-                    maxResults: 25,
+                    maxResults: 50,  // 더 많은 영상에서 태그 수집
                     regionCode: regionCode
                 });
 
@@ -1826,45 +1827,51 @@
                     id: videoIds
                 });
 
-                // 제목과 태그에서 키워드 추출
-                const allKeywords = [];
+                // 태그 빈도수 집계
+                const tagFreq = {};
+                let videosWithTags = 0;
 
                 videoDetails.items.forEach(video => {
-                    // 제목에서 키워드 추출
-                    const titleKeywords = extractKeywordsFromTitle(video.snippet.title, keyword);
-                    allKeywords.push(...titleKeywords);
+                    if (video.snippet.tags && video.snippet.tags.length > 0) {
+                        videosWithTags++;
 
-                    // 태그에서 키워드 추출 (있는 경우)
-                    if (video.snippet.tags) {
-                        const relevantTags = video.snippet.tags.filter(tag => {
-                            const lowerTag = tag.toLowerCase();
-                            const lowerKeyword = keyword.toLowerCase();
-                            // 원본 키워드 포함하거나 관련성 있는 태그
-                            return lowerTag.includes(lowerKeyword) ||
-                                   lowerKeyword.includes(lowerTag) ||
-                                   tag.length >= 2;
-                        }).slice(0, 5);
-                        allKeywords.push(...relevantTags);
+                        video.snippet.tags.forEach(tag => {
+                            const normalizedTag = tag.toLowerCase().trim();
+
+                            // 필터링 조건
+                            if (normalizedTag.length < 2) return;  // 2글자 미만 제외
+                            if (normalizedTag === lowerKeyword) return;  // 원본 키워드 제외
+                            if (isGenericTag(normalizedTag)) return;  // 범용 태그 제외
+
+                            tagFreq[normalizedTag] = (tagFreq[normalizedTag] || 0) + 1;
+                        });
                     }
                 });
 
-                // 빈도수 계산 및 정렬
-                const keywordFreq = {};
-                allKeywords.forEach(kw => {
-                    const normalized = kw.toLowerCase().trim();
-                    if (normalized.length >= 2 && normalized !== keyword.toLowerCase()) {
-                        keywordFreq[normalized] = (keywordFreq[normalized] || 0) + 1;
-                    }
-                });
+                // 태그가 있는 영상이 적으면 백업 로직
+                if (videosWithTags < 5) {
+                    console.log('태그 있는 영상 부족, 백업 키워드 사용');
+                    return [keyword, ...getBackupKeywords(keyword)];
+                }
 
-                // 빈도순 정렬 후 상위 키워드 반환
-                const sortedKeywords = Object.entries(keywordFreq)
+                // 빈도순 정렬 (2회 이상 등장한 태그만)
+                const sortedTags = Object.entries(tagFreq)
+                    .filter(([tag, count]) => count >= 2)
                     .sort((a, b) => b[1] - a[1])
-                    .slice(0, 15)
-                    .map(([kw]) => kw);
+                    .slice(0, 20)
+                    .map(([tag]) => tag);
 
-                // 원본 키워드를 맨 앞에 추가
-                return [keyword, ...sortedKeywords];
+                // 원본 키워드 포함 태그 우선 배치
+                const keywordRelated = sortedTags.filter(tag =>
+                    tag.includes(lowerKeyword) || lowerKeyword.includes(tag.split(' ')[0])
+                );
+                const otherTags = sortedTags.filter(tag =>
+                    !tag.includes(lowerKeyword) && !lowerKeyword.includes(tag.split(' ')[0])
+                );
+
+                const finalTags = [...keywordRelated, ...otherTags].slice(0, 15);
+
+                return [keyword, ...finalTags];
 
             } catch (error) {
                 console.error('연관 키워드 추출 실패:', error);
@@ -1872,57 +1879,29 @@
             }
         }
 
-        // 제목에서 의미 있는 키워드 추출
-        function extractKeywordsFromTitle(title, originalKeyword) {
-            const keywords = [];
-            const lowerOriginal = originalKeyword.toLowerCase();
-
-            // 특수문자 정리 및 단어 분리
-            const cleaned = title
-                .replace(/[\[\]【】\(\)「」『』\|\/\\·•→←↑↓]/g, ' ')
-                .replace(/[^\w\s가-힣a-zA-Z0-9]/g, ' ')
-                .replace(/\s+/g, ' ')
-                .trim();
-
-            // 불용어 목록
-            const stopWords = new Set([
-                'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by',
-                'this', 'that', 'these', 'those', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
-                'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should',
-                'i', 'you', 'he', 'she', 'it', 'we', 'they', 'my', 'your', 'his', 'her', 'its', 'our', 'their',
-                'vs', 'ep', 'episode', 'part', 'vol', 'chapter',
-                '그', '이', '저', '것', '수', '등', '더', '및', '또', '의', '를', '을', '에', '가', '은', '는'
+        // 범용 태그 필터링
+        function isGenericTag(tag) {
+            const genericTags = new Set([
+                // 한글 범용어
+                '리뷰', '추천', '방법', '하는법', '꿀팁', '팁', '정보', '소개', '설명',
+                '브이로그', 'vlog', '일상', '먹방', '톡', '채널', '유튜브', 'youtube',
+                '영상', '동영상', '콘텐츠', '컨텐츠', '2024', '2025', '최신',
+                // 영어 범용어
+                'review', 'tip', 'tips', 'how to', 'howto', 'guide', 'tutorial',
+                'best', 'top', 'new', 'official', 'video', 'clip', 'shorts', 'short'
             ]);
+            return genericTags.has(tag);
+        }
 
-            // 단어 분리
-            const words = cleaned.split(' ');
-
-            // 2-4단어 조합으로 구문 추출
-            for (let i = 0; i < words.length; i++) {
-                // 단일 단어 (2글자 이상)
-                if (words[i].length >= 2 && !stopWords.has(words[i].toLowerCase())) {
-                    keywords.push(words[i]);
-                }
-
-                // 2단어 조합
-                if (i < words.length - 1) {
-                    const twoWords = `${words[i]} ${words[i+1]}`;
-                    if (twoWords.length >= 4 && !stopWords.has(words[i].toLowerCase())) {
-                        keywords.push(twoWords);
-                    }
-                }
-
-                // 3단어 조합 (원본 키워드 포함 시)
-                if (i < words.length - 2) {
-                    const threeWords = `${words[i]} ${words[i+1]} ${words[i+2]}`;
-                    if (threeWords.toLowerCase().includes(lowerOriginal) ||
-                        lowerOriginal.includes(words[i].toLowerCase())) {
-                        keywords.push(threeWords);
-                    }
-                }
-            }
-
-            return keywords.filter(kw => kw.length >= 2);
+        // 백업 키워드 (태그 부족 시)
+        function getBackupKeywords(keyword) {
+            return [
+                `${keyword} 추천`,
+                `${keyword} 비교`,
+                `${keyword} 순위`,
+                `${keyword} 후기`,
+                `${keyword} 가격`
+            ];
         }
 
         // 키워드 경쟁 강도 분석
@@ -2175,52 +2154,50 @@
             if (label) label.textContent = text;
         }
 
-        // 롱테일 키워드 생성 (연관 키워드 기반 + 조합)
+        // 롱테일 키워드 생성 (태그 기반)
         function generateLongtailKeywords(keyword, relatedKeywords = []) {
             const longtails = new Set();
+            const lowerKeyword = keyword.toLowerCase();
 
-            // 1. 연관 키워드 중 3단어 이상인 것 추가
+            // 1. 연관 태그 중 원본 키워드를 포함하는 것 (진짜 롱테일)
             relatedKeywords.forEach(kw => {
-                const wordCount = kw.split(' ').length;
-                if (wordCount >= 3) {
+                const lowerKw = kw.toLowerCase();
+                // 원본 키워드 포함 + 더 긴 키워드
+                if (lowerKw.includes(lowerKeyword) && lowerKw !== lowerKeyword && kw.length > keyword.length + 2) {
                     longtails.add(kw);
                 }
             });
 
-            // 2. 연관 키워드 조합으로 롱테일 생성
-            relatedKeywords.slice(0, 5).forEach(kw => {
-                if (kw !== keyword && kw.length >= 2) {
-                    // 키워드 + 연관어 조합
-                    if (!kw.toLowerCase().includes(keyword.toLowerCase())) {
-                        longtails.add(`${keyword} ${kw}`);
-                    }
+            // 2. 연관 태그 중 2단어 이상인 것 (구체적인 키워드)
+            relatedKeywords.forEach(kw => {
+                const wordCount = kw.split(' ').length;
+                if (wordCount >= 2 && kw.length >= 5) {
+                    longtails.add(kw);
                 }
             });
 
-            // 3. 인기 있는 롱테일 패턴 추가 (연관 키워드와 조합)
-            const patterns = ['추천', '비교', '순위', '후기', '방법'];
-            relatedKeywords.slice(0, 3).forEach(kw => {
-                patterns.forEach(pattern => {
-                    if (!kw.includes(pattern)) {
-                        longtails.add(`${kw} ${pattern}`);
-                    }
-                });
+            // 3. 원본 키워드 + 구체적 연관어 조합
+            const specificTags = relatedKeywords.filter(kw => {
+                const lowerKw = kw.toLowerCase();
+                return !isGenericTag(lowerKw) &&
+                       !lowerKw.includes(lowerKeyword) &&
+                       kw.split(' ').length === 1 &&
+                       kw.length >= 2;
+            }).slice(0, 5);
+
+            specificTags.forEach(tag => {
+                longtails.add(`${keyword} ${tag}`);
             });
 
-            // 4. 기본 롱테일 패턴 (백업)
-            if (longtails.size < 8) {
-                const backupPatterns = [
-                    `${keyword} 하는 법`,
-                    `${keyword} 초보자`,
-                    `${keyword} 추천`,
-                    `${keyword} 비교`,
-                    `${keyword} 순위`,
-                    `${keyword} 후기`
-                ];
-                backupPatterns.forEach(p => longtails.add(p));
+            // 4. 백업 (충분한 롱테일이 없을 경우)
+            if (longtails.size < 6) {
+                const actions = ['추천', '비교', '가격', '후기', '순위'];
+                actions.forEach(action => {
+                    longtails.add(`${keyword} ${action}`);
+                });
             }
 
-            return [...longtails].slice(0, 15);
+            return [...longtails].slice(0, 12);
         }
 
         // 연관 키워드 표시 (간단한 태그 형태)
