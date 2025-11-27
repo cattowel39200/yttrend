@@ -6079,7 +6079,8 @@
 
         // 추천 제목 조합 생성
         function generateSuggestedTitles() {
-            const keyword = document.getElementById('searchInput').value.trim();
+            const keywordInput = document.getElementById('keyword');
+            const keyword = keywordInput ? keywordInput.value.trim() : '';
             if (!keyword) return;
 
             const patterns = [
@@ -6091,6 +6092,7 @@
             ];
 
             const suggestedTitles = document.getElementById('suggestedTitles');
+            if (!suggestedTitles) return;
             suggestedTitles.innerHTML = patterns.map(p => `
                 <div class="template-item" onclick="copyToClipboard('${escapeHtml(p)}')">
                     <span class="template-text">${escapeHtml(p)}</span>
