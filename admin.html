@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지 - 유튜브 키워드 탐색기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #1a1a1a;
+            border-right: 1px solid #333;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .sidebar-nav {
+            padding: 0 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #888;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: #252525;
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            color: #fff;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .back-link {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+
+        /* 메인 컨텐츠 */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-header h2 {
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .admin-user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #1a1a1a;
+            padding: 10px 15px;
+            border-radius: 25px;
+        }
+
+        .admin-user-info img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
+
+        .admin-user-info span {
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        /* 대시보드 카드 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #333;
+        }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-card-header span {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .stat-card-header .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-card-header .icon.blue { background: rgba(72, 219, 251, 0.2); color: #48dbfb; }
+        .stat-card-header .icon.green { background: rgba(29, 209, 161, 0.2); color: #1dd1a1; }
+        .stat-card-header .icon.yellow { background: rgba(254, 202, 87, 0.2); color: #feca57; }
+        .stat-card-header .icon.red { background: rgba(233, 69, 96, 0.2); color: #e94560; }
+
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .stat-card-change {
+            font-size: 0.8rem;
+            color: #1dd1a1;
+        }
+
+        .stat-card-change.negative {
+            color: #e94560;
+        }
+
+        /* 섹션 */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* 테이블 */
+        .data-table-container {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #333;
+            margin-bottom: 30px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-header h3 {
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            background: #252525;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            width: 250px;
+        }
+
+        .search-input::placeholder {
+            color: #666;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: #fff;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        .data-table th {
+            color: #888;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .data-table td {
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .data-table tr:hover {
+            background: #252525;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-cell img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
+
+        .user-cell-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-cell-name {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .user-cell-email {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .role-badge.admin {
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            color: #fff;
+        }
+
+        .role-badge.premium {
+            background: linear-gradient(90deg, #feca57, #ff9f43);
+            color: #000;
+        }
+
+        .role-badge.user {
+            background: #48dbfb;
+            color: #000;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+
+        .status-badge.active {
+            background: rgba(29, 209, 161, 0.2);
+            color: #1dd1a1;
+        }
+
+        .status-badge.suspended {
+            background: rgba(233, 69, 96, 0.2);
+            color: #e94560;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid #444;
+            color: #888;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-right: 5px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            border-color: #48dbfb;
+            color: #48dbfb;
+        }
+
+        .action-btn.danger:hover {
+            border-color: #e94560;
+            color: #e94560;
+        }
+
+        /* 차트 컨테이너 */
+        .chart-container {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #333;
+            margin-bottom: 30px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h3 {
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .chart-area {
+            height: 300px;
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            padding: 20px 0;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, #48dbfb, #54a0ff);
+            border-radius: 4px 4px 0 0;
+            min-height: 20px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+        }
+
+        .chart-bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #888;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+
+        .chart-bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #48dbfb;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* 인기 키워드 */
+        .keyword-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .keyword-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            background: #252525;
+            border-radius: 8px;
+        }
+
+        .keyword-rank {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .keyword-text {
+            flex: 1;
+            color: #fff;
+        }
+
+        .keyword-count {
+            color: #48dbfb;
+            font-weight: 600;
+        }
+
+        /* 로딩 */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #333;
+            border-top-color: #48dbfb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 접근 거부 */
+        .access-denied {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .access-denied svg {
+            width: 80px;
+            height: 80px;
+            color: #e94560;
+            margin-bottom: 20px;
+        }
+
+        .access-denied h2 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .access-denied p {
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .access-denied a {
+            color: #48dbfb;
+            text-decoration: none;
+        }
+
+        /* 모달 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #fff;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            background: #252525;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        /* 토스트 메시지 */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 8px;
+            display: none;
+            z-index: 3000;
+        }
+
+        .toast.show {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+                padding: 10px 0;
+            }
+
+            .sidebar-header,
+            .nav-item span {
+                display: none;
+            }
+
+            .nav-item {
+                justify-content: center;
+                padding: 12px;
+            }
+
+            .main-content {
+                margin-left: 60px;
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .table-actions {
+                flex-direction: column;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+        }
+    </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <!-- 접근 거부 화면 -->
+    <div class="access-denied" id="accessDenied" style="display: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+        </svg>
+        <h2>접근 권한이 없습니다</h2>
+        <p>이 페이지는 관리자만 접근할 수 있습니다.</p>
+        <a href="index.html">← 메인 페이지로 돌아가기</a>
+    </div>
+
+    <!-- 로딩 화면 -->
+    <div class="loading-spinner" id="loadingScreen">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- 관리자 페이지 -->
+    <div id="adminPage" style="display: none;">
+        <!-- 사이드바 -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>관리자 페이지</h1>
+                <p>YouTube 키워드 탐색기</p>
+            </div>
+            <div class="sidebar-nav">
+                <a class="nav-item active" data-section="dashboard" onclick="switchSection('dashboard')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    <span>대시보드</span>
+                </a>
+                <a class="nav-item" data-section="users" onclick="switchSection('users')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span>회원 관리</span>
+                </a>
+                <a class="nav-item" data-section="statistics" onclick="switchSection('statistics')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="20" x2="12" y2="10"/>
+                        <line x1="18" y1="20" x2="18" y2="4"/>
+                        <line x1="6" y1="20" x2="6" y2="16"/>
+                    </svg>
+                    <span>통계</span>
+                </a>
+                <a class="nav-item" data-section="settings" onclick="switchSection('settings')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    <span>설정</span>
+                </a>
+                <div class="back-link">
+                    <a class="nav-item" href="index.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"/>
+                            <polyline points="12 19 5 12 12 5"/>
+                        </svg>
+                        <span>메인으로 돌아가기</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 메인 컨텐츠 -->
+        <main class="main-content">
+            <div class="page-header">
+                <h2 id="pageTitle">대시보드</h2>
+                <div class="admin-user-info">
+                    <img id="adminAvatar" src="" alt="관리자">
+                    <span id="adminName">관리자</span>
+                </div>
+            </div>
+
+            <!-- 대시보드 섹션 -->
+            <section class="section active" id="dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span>총 회원수</span>
+                            <div class="icon blue">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-card-value" id="totalUsers">0</div>
+                        <div class="stat-card-change">전체 가입자</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span>오늘 가입</span>
+                            <div class="icon green">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="8.5" cy="7" r="4"/>
+                                    <line x1="20" y1="8" x2="20" y2="14"/>
+                                    <line x1="23" y1="11" x2="17" y2="11"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-card-value" id="todayUsers">0</div>
+                        <div class="stat-card-change">신규 가입자</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span>총 검색 횟수</span>
+                            <div class="icon yellow">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-card-value" id="totalSearches">0</div>
+                        <div class="stat-card-change">누적 검색</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span>프리미엄 회원</span>
+                            <div class="icon red">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-card-value" id="premiumUsers">0</div>
+                        <div class="stat-card-change">유료 회원</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>최근 7일 가입자 추이</h3>
+                    </div>
+                    <div class="chart-area" id="signupChart">
+                        <!-- 차트가 동적으로 생성됩니다 -->
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    <div class="table-header">
+                        <h3>인기 검색 키워드 TOP 10</h3>
+                    </div>
+                    <div class="keyword-list" id="topKeywords">
+                        <div class="loading-spinner"><div class="spinner"></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 회원 관리 섹션 -->
+            <section class="section" id="users">
+                <div class="data-table-container">
+                    <div class="table-header">
+                        <h3>회원 목록</h3>
+                        <div class="table-actions">
+                            <input type="text" class="search-input" placeholder="이름 또는 이메일로 검색..." id="userSearchInput" oninput="searchUsers()">
+                        </div>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>회원 정보</th>
+                                <th>등급</th>
+                                <th>상태</th>
+                                <th>검색 횟수</th>
+                                <th>가입일</th>
+                                <th>액션</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr><td colspan="6"><div class="loading-spinner"><div class="spinner"></div></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 통계 섹션 -->
+            <section class="section" id="statistics">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span>오늘 검색</span>
+                            <div class="icon blue">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-card-value" id="todaySearches">0</div>
+                        <div class="stat-card-change">오늘 검색 횟수</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span>평균 검색/회원</span>
+                            <div class="icon green">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="20" x2="12" y2="10"/>
+                                    <line x1="18" y1="20" x2="18" y2="4"/>
+                                    <line x1="6" y1="20" x2="6" y2="16"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-card-value" id="avgSearches">0</div>
+                        <div class="stat-card-change">회원당 평균</div>
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    <div class="table-header">
+                        <h3>최근 검색 기록</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>사용자</th>
+                                <th>검색 키워드</th>
+                                <th>국가</th>
+                                <th>결과 수</th>
+                                <th>검색 시간</th>
+                            </tr>
+                        </thead>
+                        <tbody id="searchLogsBody">
+                            <tr><td colspan="5"><div class="loading-spinner"><div class="spinner"></div></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 설정 섹션 -->
+            <section class="section" id="settings">
+                <div class="data-table-container">
+                    <div class="table-header">
+                        <h3>시스템 설정</h3>
+                    </div>
+                    <div style="padding: 20px; color: #888;">
+                        <p>향후 업데이트에서 추가될 예정입니다.</p>
+                        <ul style="margin-top: 15px; margin-left: 20px;">
+                            <li>비회원 일일 검색 제한 설정</li>
+                            <li>회원 등급별 기능 제한</li>
+                            <li>공지사항 관리</li>
+                            <li>서비스 점검 모드</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 회원 수정 모달 -->
+    <div class="modal" id="editUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>회원 정보 수정</h3>
+                <button class="modal-close" onclick="closeEditUserModal()">×</button>
+            </div>
+            <div class="form-group">
+                <label>이메일</label>
+                <input type="text" id="editUserEmail" disabled>
+            </div>
+            <div class="form-group">
+                <label>회원 등급</label>
+                <select id="editUserRole">
+                    <option value="user">일반회원</option>
+                    <option value="premium">프리미엄</option>
+                    <option value="admin">관리자</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>상태</label>
+                <select id="editUserStatus">
+                    <option value="active">활성</option>
+                    <option value="suspended">정지</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeEditUserModal()">취소</button>
+                <button class="btn btn-primary" onclick="saveUserChanges()">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 토스트 메시지 -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Firebase 설정
+        const firebaseConfig = {
+            apiKey: "AIzaSyDtKX51RGJSz1b_fAPRZ8ujAtAfbpiIucY",
+            authDomain: "yttrend-497e5.firebaseapp.com",
+            projectId: "yttrend-497e5",
+            storageBucket: "yttrend-497e5.firebasestorage.app",
+            messagingSenderId: "869193291180",
+            appId: "1:869193291180:web:bf6533ea09de78b2efd609",
+            measurementId: "G-WQHSD9F43B"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let currentUser = null;
+        let currentUserData = null;
+        let allUsers = [];
+        let editingUserId = null;
+
+        // 인증 상태 확인
+        auth.onAuthStateChanged(async (user) => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const accessDenied = document.getElementById('accessDenied');
+            const adminPage = document.getElementById('adminPage');
+
+            if (!user) {
+                // 로그인 안됨
+                loadingScreen.style.display = 'none';
+                accessDenied.style.display = 'flex';
+                return;
+            }
+
+            currentUser = user;
+
+            // 사용자 권한 확인
+            try {
+                const userDoc = await db.collection('users').doc(user.uid).get();
+
+                if (!userDoc.exists || userDoc.data().role !== 'admin') {
+                    // 관리자 아님
+                    loadingScreen.style.display = 'none';
+                    accessDenied.style.display = 'flex';
+                    return;
+                }
+
+                currentUserData = userDoc.data();
+
+                // 관리자 확인 완료
+                loadingScreen.style.display = 'none';
+                adminPage.style.display = 'block';
+
+                // 관리자 정보 표시
+                document.getElementById('adminAvatar').src = user.photoURL || 'https://via.placeholder.com/35';
+                document.getElementById('adminName').textContent = user.displayName || '관리자';
+
+                // 데이터 로드
+                loadDashboardData();
+                loadUsers();
+                loadSearchLogs();
+
+            } catch (error) {
+                console.error('권한 확인 오류:', error);
+                loadingScreen.style.display = 'none';
+                accessDenied.style.display = 'flex';
+            }
+        });
+
+        // 섹션 전환
+        function switchSection(sectionId) {
+            // 네비게이션 활성화
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.section === sectionId);
+            });
+
+            // 섹션 활성화
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.toggle('active', section.id === sectionId);
+            });
+
+            // 페이지 제목 변경
+            const titles = {
+                dashboard: '대시보드',
+                users: '회원 관리',
+                statistics: '통계',
+                settings: '설정'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionId] || '대시보드';
+        }
+
+        // 대시보드 데이터 로드
+        async function loadDashboardData() {
+            try {
+                // 전체 사용자 수
+                const usersSnapshot = await db.collection('users').get();
+                const totalUsers = usersSnapshot.size;
+                document.getElementById('totalUsers').textContent = totalUsers;
+
+                // 오늘 가입자 수
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                let todayCount = 0;
+                let premiumCount = 0;
+                let totalSearchCount = 0;
+
+                usersSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.createdAt) {
+                        const createdAt = data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt);
+                        if (createdAt >= today) {
+                            todayCount++;
+                        }
+                    }
+                    if (data.role === 'premium') {
+                        premiumCount++;
+                    }
+                    totalSearchCount += data.searchCount || 0;
+                });
+
+                document.getElementById('todayUsers').textContent = todayCount;
+                document.getElementById('premiumUsers').textContent = premiumCount;
+                document.getElementById('totalSearches').textContent = formatNumber(totalSearchCount);
+
+                // 평균 검색
+                const avgSearches = totalUsers > 0 ? (totalSearchCount / totalUsers).toFixed(1) : 0;
+                document.getElementById('avgSearches').textContent = avgSearches;
+
+                // 7일간 가입자 차트
+                renderSignupChart(usersSnapshot);
+
+                // 인기 키워드
+                loadTopKeywords();
+
+            } catch (error) {
+                console.error('대시보드 데이터 로드 오류:', error);
+            }
+        }
+
+        // 가입자 차트 렌더링
+        function renderSignupChart(usersSnapshot) {
+            const chartArea = document.getElementById('signupChart');
+            const days = [];
+            const counts = {};
+
+            // 최근 7일 날짜 생성
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+                days.push({ date, dateStr });
+                counts[dateStr] = 0;
+            }
+
+            // 가입자 카운트
+            usersSnapshot.forEach(doc => {
+                const data = doc.data();
+                if (data.createdAt) {
+                    const createdAt = data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt);
+                    const dateStr = createdAt.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+                    if (counts.hasOwnProperty(dateStr)) {
+                        counts[dateStr]++;
+                    }
+                }
+            });
+
+            // 차트 렌더링
+            const maxCount = Math.max(...Object.values(counts), 1);
+            chartArea.innerHTML = days.map(day => {
+                const count = counts[day.dateStr];
+                const height = Math.max((count / maxCount) * 250, 20);
+                return `
+                    <div class="chart-bar" style="height: ${height}px">
+                        <span class="chart-bar-value">${count}</span>
+                        <span class="chart-bar-label">${day.dateStr}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 인기 키워드 로드
+        async function loadTopKeywords() {
+            const container = document.getElementById('topKeywords');
+
+            try {
+                const logsSnapshot = await db.collection('searchLogs')
+                    .orderBy('timestamp', 'desc')
+                    .limit(500)
+                    .get();
+
+                const keywordCounts = {};
+                logsSnapshot.forEach(doc => {
+                    const keyword = doc.data().keyword;
+                    if (keyword) {
+                        keywordCounts[keyword] = (keywordCounts[keyword] || 0) + 1;
+                    }
+                });
+
+                const sortedKeywords = Object.entries(keywordCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10);
+
+                if (sortedKeywords.length === 0) {
+                    container.innerHTML = '<div style="padding: 20px; color: #888; text-align: center;">검색 기록이 없습니다</div>';
+                    return;
+                }
+
+                container.innerHTML = sortedKeywords.map(([keyword, count], index) => `
+                    <div class="keyword-item">
+                        <div class="keyword-rank">${index + 1}</div>
+                        <div class="keyword-text">${escapeHtml(keyword)}</div>
+                        <div class="keyword-count">${count}회</div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('인기 키워드 로드 오류:', error);
+                container.innerHTML = '<div style="padding: 20px; color: #888; text-align: center;">로드 실패</div>';
+            }
+        }
+
+        // 회원 목록 로드
+        async function loadUsers() {
+            const tbody = document.getElementById('usersTableBody');
+
+            try {
+                const snapshot = await db.collection('users').orderBy('createdAt', 'desc').get();
+                allUsers = [];
+
+                snapshot.forEach(doc => {
+                    allUsers.push({ id: doc.id, ...doc.data() });
+                });
+
+                renderUsersTable(allUsers);
+
+            } catch (error) {
+                console.error('회원 목록 로드 오류:', error);
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #888;">로드 실패</td></tr>';
+            }
+        }
+
+        // 회원 테이블 렌더링
+        function renderUsersTable(users) {
+            const tbody = document.getElementById('usersTableBody');
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #888;">회원이 없습니다</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => {
+                const createdAt = user.createdAt ?
+                    (user.createdAt.toDate ? user.createdAt.toDate() : new Date(user.createdAt)).toLocaleDateString('ko-KR') :
+                    '-';
+
+                return `
+                    <tr>
+                        <td>
+                            <div class="user-cell">
+                                <img src="${user.photoURL || 'https://via.placeholder.com/35'}" alt="">
+                                <div class="user-cell-info">
+                                    <span class="user-cell-name">${escapeHtml(user.displayName || '이름 없음')}</span>
+                                    <span class="user-cell-email">${escapeHtml(user.email || '-')}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="role-badge ${user.role}">${getRoleName(user.role)}</span></td>
+                        <td><span class="status-badge ${user.status || 'active'}">${user.status === 'suspended' ? '정지' : '활성'}</span></td>
+                        <td>${user.searchCount || 0}</td>
+                        <td>${createdAt}</td>
+                        <td>
+                            <button class="action-btn" onclick="openEditUserModal('${user.id}')">수정</button>
+                            ${user.id !== currentUser.uid ? `<button class="action-btn danger" onclick="confirmDeleteUser('${user.id}')">삭제</button>` : ''}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 회원 검색
+        function searchUsers() {
+            const query = document.getElementById('userSearchInput').value.toLowerCase();
+            const filtered = allUsers.filter(user =>
+                (user.displayName || '').toLowerCase().includes(query) ||
+                (user.email || '').toLowerCase().includes(query)
+            );
+            renderUsersTable(filtered);
+        }
+
+        // 역할 이름
+        function getRoleName(role) {
+            const names = { admin: '관리자', premium: '프리미엄', user: '일반회원' };
+            return names[role] || '일반회원';
+        }
+
+        // 회원 수정 모달 열기
+        function openEditUserModal(userId) {
+            const user = allUsers.find(u => u.id === userId);
+            if (!user) return;
+
+            editingUserId = userId;
+            document.getElementById('editUserEmail').value = user.email || '';
+            document.getElementById('editUserRole').value = user.role || 'user';
+            document.getElementById('editUserStatus').value = user.status || 'active';
+            document.getElementById('editUserModal').classList.add('show');
+        }
+
+        // 회원 수정 모달 닫기
+        function closeEditUserModal() {
+            document.getElementById('editUserModal').classList.remove('show');
+            editingUserId = null;
+        }
+
+        // 회원 정보 저장
+        async function saveUserChanges() {
+            if (!editingUserId) return;
+
+            const newRole = document.getElementById('editUserRole').value;
+            const newStatus = document.getElementById('editUserStatus').value;
+
+            try {
+                await db.collection('users').doc(editingUserId).update({
+                    role: newRole,
+                    status: newStatus
+                });
+
+                showToast('회원 정보가 수정되었습니다');
+                closeEditUserModal();
+                loadUsers();
+                loadDashboardData();
+
+            } catch (error) {
+                console.error('회원 수정 오류:', error);
+                showToast('수정 중 오류가 발생했습니다');
+            }
+        }
+
+        // 회원 삭제 확인
+        function confirmDeleteUser(userId) {
+            if (confirm('정말 이 회원을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+                deleteUser(userId);
+            }
+        }
+
+        // 회원 삭제
+        async function deleteUser(userId) {
+            try {
+                await db.collection('users').doc(userId).delete();
+                showToast('회원이 삭제되었습니다');
+                loadUsers();
+                loadDashboardData();
+            } catch (error) {
+                console.error('회원 삭제 오류:', error);
+                showToast('삭제 중 오류가 발생했습니다');
+            }
+        }
+
+        // 검색 로그 로드
+        async function loadSearchLogs() {
+            const tbody = document.getElementById('searchLogsBody');
+
+            try {
+                const snapshot = await db.collection('searchLogs')
+                    .orderBy('timestamp', 'desc')
+                    .limit(50)
+                    .get();
+
+                if (snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #888;">검색 기록이 없습니다</td></tr>';
+                    return;
+                }
+
+                // 오늘 검색 횟수 계산
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                let todaySearchCount = 0;
+
+                const rows = [];
+                for (const doc of snapshot.docs) {
+                    const data = doc.data();
+                    const timestamp = data.timestamp ?
+                        (data.timestamp.toDate ? data.timestamp.toDate() : new Date(data.timestamp)) :
+                        null;
+
+                    if (timestamp && timestamp >= today) {
+                        todaySearchCount++;
+                    }
+
+                    // 사용자 정보 가져오기
+                    let userName = '알 수 없음';
+                    if (data.userId) {
+                        const userDoc = await db.collection('users').doc(data.userId).get();
+                        if (userDoc.exists) {
+                            userName = userDoc.data().displayName || userDoc.data().email || '알 수 없음';
+                        }
+                    }
+
+                    rows.push(`
+                        <tr>
+                            <td>${escapeHtml(userName)}</td>
+                            <td>${escapeHtml(data.keyword || '-')}</td>
+                            <td>${data.country || '-'}</td>
+                            <td>${data.resultCount || 0}</td>
+                            <td>${timestamp ? timestamp.toLocaleString('ko-KR') : '-'}</td>
+                        </tr>
+                    `);
+                }
+
+                tbody.innerHTML = rows.join('');
+                document.getElementById('todaySearches').textContent = todaySearchCount;
+
+            } catch (error) {
+                console.error('검색 로그 로드 오류:', error);
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #888;">로드 실패</td></tr>';
+            }
+        }
+
+        // 유틸리티 함수
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
