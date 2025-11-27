@@ -6364,12 +6364,6 @@
         function showSearchLimitModal() {
             const limit = getCurrentSearchLimit();
             let modal = document.getElementById('searchLimitModal');
-            if (!modal) {
-                modal = document.createElement('div');
-                modal.id = 'searchLimitModal';
-                modal.className = 'search-limit-modal';
-            }
-
             const isGuest = !currentUser;
             const message = isGuest
                 ? `비회원은 하루 ${limit}회까지 검색할 수 있습니다.`
@@ -6377,6 +6371,13 @@
             const subMessage = isGuest
                 ? '구글 로그인을 하시면 더 많이 검색하실 수 있습니다.'
                 : '프리미엄 회원으로 업그레이드하시면 무제한으로 검색하실 수 있습니다.';
+
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'searchLimitModal';
+                modal.className = 'search-limit-modal';
+                document.body.appendChild(modal);
+            }
 
             modal.innerHTML = `
                 <div class="search-limit-content">
@@ -6400,8 +6401,6 @@
                     </div>
                 </div>
             `;
-                document.body.appendChild(modal);
-            }
             modal.classList.add('show');
         }
 
