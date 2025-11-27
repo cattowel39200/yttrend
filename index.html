@@ -1642,7 +1642,7 @@
             '28': { name: '과학기술', class: 'tech', icon: '🔬' }
         };
 
-        // 트렌드 키워드 로드
+        // 트렌드 키워드 로드 (태그 기반 + 조회수 가중치)
         async function loadTrendKeywords() {
             const categoryGrid = document.getElementById('categoryGrid');
             categoryGrid.innerHTML = '<div class="trend-loading">트렌드 키워드 로딩 중...</div>';
@@ -1657,40 +1657,56 @@
                 // 선택된 국가 코드 가져오기
                 const regionCode = document.getElementById('regionCode').value;
 
-                // 인기 동영상 가져오기
+                // 인기 동영상 가져오기 (태그 + 통계 포함)
                 const response = await fetchYouTubeAPI('videos', {
-                    part: 'snippet',
+                    part: 'snippet,statistics',
                     chart: 'mostPopular',
                     regionCode: regionCode,
                     maxResults: 50
                 });
 
-                // 카테고리별로 그룹화 및 키워드 추출
+                // 카테고리별로 그룹화 및 태그 추출
                 const categoryKeywords = {};
 
                 response.items.forEach(video => {
                     const catId = video.snippet.categoryId;
                     const catInfo = categoryMap[catId] || { name: '기타', class: 'entertainment', icon: '📺' };
+                    const viewCount = parseInt(video.statistics.viewCount || 0);
 
                     if (!categoryKeywords[catId]) {
                         categoryKeywords[catId] = {
                             ...catInfo,
-                            keywords: []
+                            tagScores: {}  // 태그별 점수 저장
                         };
                     }
 
-                    // 제목에서 키워드 추출
-                    const title = video.snippet.title;
-                    const keywords = extractKeywords(title);
-                    categoryKeywords[catId].keywords.push(...keywords);
+                    // 태그에서 키워드 추출 (태그가 있는 경우만)
+                    if (video.snippet.tags && video.snippet.tags.length > 0) {
+                        // 조회수 가중치 계산 (1만 조회당 1점, 최대 10점)
+                        const viewWeight = Math.min(10, viewCount / 10000);
+
+                        video.snippet.tags.forEach(tag => {
+                            const normalizedTag = tag.toLowerCase().trim();
+
+                            // 필터링: 범용 태그 및 짧은 태그 제외
+                            if (normalizedTag.length < 2) return;
+                            if (isTrendGenericTag(normalizedTag)) return;
+
+                            // 기존 점수에 가중치 추가
+                            if (!categoryKeywords[catId].tagScores[normalizedTag]) {
+                                categoryKeywords[catId].tagScores[normalizedTag] = 0;
+                            }
+                            categoryKeywords[catId].tagScores[normalizedTag] += (1 + viewWeight);
+                        });
+                    }
                 });
 
                 // 카테고리별 상위 키워드 선정
                 const categoryCards = Object.entries(categoryKeywords)
-                    .filter(([_, cat]) => cat.keywords.length > 0)
+                    .filter(([_, cat]) => Object.keys(cat.tagScores).length > 0)
                     .slice(0, 8)
                     .map(([catId, cat]) => {
-                        const topKeywords = getTopKeywords(cat.keywords, 6);
+                        const topKeywords = getTopTrendKeywords(cat.tagScores, 6);
                         return `
                             <div class="category-card ${cat.class}">
                                 <h4>${cat.icon} ${cat.name}</h4>
@@ -1710,36 +1726,31 @@
             }
         }
 
-        // 키워드 추출 함수
-        function extractKeywords(title) {
-            // 특수문자 제거 및 단어 분리
-            const cleaned = title
-                .replace(/[^\w\s가-힣]/g, ' ')
-                .replace(/\s+/g, ' ')
-                .trim();
-
-            // 2글자 이상 단어만 추출
-            const words = cleaned.split(' ').filter(word => {
-                return word.length >= 2 &&
-                       !/^\d+$/.test(word) &&
-                       !['the', 'and', 'for', 'with', 'this', 'that', 'from'].includes(word.toLowerCase());
-            });
-
-            return words.slice(0, 3);
+        // 트렌드용 범용 태그 필터링 (더 엄격하게)
+        function isTrendGenericTag(tag) {
+            const genericTags = new Set([
+                // 한글 범용어
+                '리뷰', '추천', '방법', '하는법', '꿀팁', '팁', '정보', '소개', '설명',
+                '브이로그', 'vlog', '일상', '먹방', '톡', '채널', '유튜브', 'youtube',
+                '영상', '동영상', '콘텐츠', '컨텐츠', '2024', '2025', '최신', '공식',
+                '예고편', '예고', '티저', '풀버전', '공개', '최초', '단독', '독점',
+                '라이브', 'live', '실시간', '생방송', '하이라이트', '명장면',
+                '웃긴', '재밌는', '감동', '충격', '반전', '레전드',
+                // 영어 범용어
+                'review', 'tip', 'tips', 'how to', 'howto', 'guide', 'tutorial',
+                'best', 'top', 'new', 'official', 'video', 'clip', 'shorts', 'short',
+                'trailer', 'teaser', 'mv', 'music video', 'full', 'episode', 'ep',
+                'reaction', 'highlight', 'highlights', 'compilation', 'funny', 'viral'
+            ]);
+            return genericTags.has(tag);
         }
 
-        // 상위 키워드 추출
-        function getTopKeywords(keywords, count) {
-            const freq = {};
-            keywords.forEach(kw => {
-                const lower = kw.toLowerCase();
-                freq[lower] = (freq[lower] || 0) + 1;
-            });
-
-            return Object.entries(freq)
+        // 점수 기반 상위 키워드 추출
+        function getTopTrendKeywords(tagScores, count) {
+            return Object.entries(tagScores)
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, count)
-                .map(([kw]) => kw);
+                .map(([tag]) => tag);
         }
 
         // YouTube API 호출 함수 (캐싱 적용)
