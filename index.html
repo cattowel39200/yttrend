@@ -5252,7 +5252,7 @@
             highViewTitles.innerHTML = sortedByViews.map(t => `
                 <div class="template-item" onclick="copyToClipboard('${escapeHtml(t.title)}')">
                     <span class="template-text">${escapeHtml(t.title)}</span>
-                    <span class="template-views">${formatNumber(t.views)} 조회</span>
+                    <span class="template-views">${formatViews(t.views)} 조회</span>
                 </div>
             `).join('') || '<div class="template-loading">데이터 없음</div>';
 
@@ -5262,7 +5262,7 @@
             trendTitles.innerHTML = sortedByDate.map(t => `
                 <div class="template-item" onclick="copyToClipboard('${escapeHtml(t.title)}')">
                     <span class="template-text">${escapeHtml(t.title)}</span>
-                    <span class="template-views">${formatNumber(t.views)} 조회</span>
+                    <span class="template-views">${formatViews(t.views)} 조회</span>
                 </div>
             `).join('') || '<div class="template-loading">데이터 없음</div>';
 
