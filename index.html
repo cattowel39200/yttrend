@@ -2841,6 +2841,313 @@
             line-height: 1.6;
         }
 
+        /* Canva 템플릿 섹션 */
+        .canva-templates {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #00C4CC33;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .canva-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00C4CC;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .canva-desc {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .canva-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .canva-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .canva-btn-primary {
+            background: #00C4CC;
+            color: #000;
+        }
+
+        .canva-btn-primary:hover {
+            background: #00a8b0;
+            transform: translateY(-2px);
+        }
+
+        .canva-btn-secondary {
+            background: transparent;
+            border: 1px solid #00C4CC;
+            color: #00C4CC;
+        }
+
+        .canva-btn-secondary:hover {
+            background: #00C4CC22;
+        }
+
+        .canva-tips {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .canva-tips .tip-item {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        /* 숏폼 트렌드 탭 스타일 */
+        .shorts-platform-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .platform-tab {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 20px;
+            color: #888;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .platform-tab:hover {
+            border-color: #555;
+            color: #fff;
+        }
+
+        .platform-tab.active {
+            background: linear-gradient(90deg, #FF0050, #FF4081);
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .platform-icon {
+            font-size: 1rem;
+        }
+
+        .shorts-platform-content {
+            display: none;
+        }
+
+        .shorts-platform-content.active {
+            display: block;
+        }
+
+        .trend-category {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .trend-category-header {
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .trend-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .trend-tag {
+            background: #333;
+            color: #48dbfb;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .trend-tag:hover {
+            background: #48dbfb;
+            color: #000;
+        }
+
+        .sound-trends {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sound-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: #252525;
+            border-radius: 8px;
+        }
+
+        .sound-icon {
+            font-size: 1.5rem;
+        }
+
+        .sound-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sound-name {
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .sound-tip {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .content-ideas {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .idea-card {
+            background: #252525;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .idea-type {
+            color: #feca57;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .idea-text {
+            color: #ccc;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .optimization-tips {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .tip-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #252525;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .tip-card .tip-icon {
+            font-size: 1.2rem;
+        }
+
+        .tip-card .tip-text {
+            color: #ccc;
+            font-size: 0.8rem;
+        }
+
+        .longform-strategy {
+            background: #252525;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .longform-strategy p {
+            color: #48dbfb;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .longform-strategy ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .longform-strategy li {
+            color: #ccc;
+            font-size: 0.85rem;
+            padding: 5px 0;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .longform-strategy li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #48dbfb;
+        }
+
+        .shorts-keyword-ideas {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #FF005033;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .keyword-shorts-ideas {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .shorts-idea-item {
+            background: #252525;
+            border-radius: 8px;
+            padding: 12px;
+            border-left: 3px solid #FF0050;
+        }
+
+        .shorts-idea-platform {
+            color: #FF0050;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .shorts-idea-text {
+            color: #fff;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
         /* 반응형 디자인 */
         @media (max-width: 768px) {
             body {
@@ -3227,6 +3534,14 @@
                     </svg>
                     영상 길이
                 </button>
+                <button class="helper-tab" data-tab="shorts-keywords" onclick="switchHelperTab('shorts-keywords')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                    숏폼 트렌드
+                </button>
             </div>
 
             <!-- 제목 생성기 탭 -->
@@ -3344,6 +3659,36 @@
                         <div class="template-loading">검색 후 분석됩니다</div>
                     </div>
                 </div>
+
+                <!-- Canva 템플릿 연결 -->
+                <div class="canva-templates">
+                    <div class="canva-header">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00C4CC" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M12 8v8M8 12h8"/>
+                        </svg>
+                        <span>썸네일 직접 만들기</span>
+                    </div>
+                    <p class="canva-desc">Canva에서 무료로 전문적인 썸네일을 제작하세요</p>
+                    <div class="canva-buttons">
+                        <a href="https://www.canva.com/templates/?query=youtube-thumbnail" target="_blank" class="canva-btn canva-btn-primary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                            </svg>
+                            Canva 템플릿 둘러보기
+                        </a>
+                        <a href="https://www.canva.com/create/youtube-thumbnails/" target="_blank" class="canva-btn canva-btn-secondary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            새 썸네일 만들기
+                        </a>
+                    </div>
+                    <div class="canva-tips">
+                        <div class="tip-item">💡 유튜브 썸네일 권장 크기: 1280 x 720 픽셀</div>
+                        <div class="tip-item">💡 얼굴, 큰 텍스트, 밝은 색상이 클릭률을 높입니다</div>
+                    </div>
+                </div>
             </div>
 
             <!-- 업로드 최적화 탭 -->
@@ -3450,6 +3795,194 @@
                     <div class="insight-title">📝 분석 인사이트</div>
                     <div class="insight-text" id="lengthInsightText">
                         검색 후 분석됩니다
+                    </div>
+                </div>
+            </div>
+
+            <!-- 숏폼 트렌드 탭 -->
+            <div class="helper-tab-content" id="shorts-keywords">
+                <div class="helper-section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF0050" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                    숏폼 트렌드 (틱톡/릴스/쇼츠)
+                </div>
+                <p class="helper-section-desc">틱톡, 인스타 릴스, 유튜브 쇼츠의 인기 트렌드를 확인하세요.</p>
+
+                <div class="shorts-platform-tabs">
+                    <button class="platform-tab active" data-platform="tiktok" onclick="switchShortsPlatform('tiktok')">
+                        <span class="platform-icon">🎵</span> 틱톡
+                    </button>
+                    <button class="platform-tab" data-platform="reels" onclick="switchShortsPlatform('reels')">
+                        <span class="platform-icon">📸</span> 릴스
+                    </button>
+                    <button class="platform-tab" data-platform="shorts" onclick="switchShortsPlatform('shorts')">
+                        <span class="platform-icon">▶️</span> 쇼츠
+                    </button>
+                </div>
+
+                <!-- 틱톡 트렌드 -->
+                <div class="shorts-platform-content active" id="tiktok-content">
+                    <div class="trend-category">
+                        <div class="trend-category-header">🔥 인기 해시태그</div>
+                        <div class="trend-tags" id="tiktokHashtags">
+                            <span class="trend-tag">#fyp</span>
+                            <span class="trend-tag">#viral</span>
+                            <span class="trend-tag">#trending</span>
+                            <span class="trend-tag">#foryou</span>
+                            <span class="trend-tag">#foryoupage</span>
+                            <span class="trend-tag">#tiktok</span>
+                            <span class="trend-tag">#funny</span>
+                            <span class="trend-tag">#comedy</span>
+                            <span class="trend-tag">#dance</span>
+                            <span class="trend-tag">#challenge</span>
+                        </div>
+                    </div>
+                    <div class="trend-category">
+                        <div class="trend-category-header">🎵 인기 사운드 트렌드</div>
+                        <div class="sound-trends" id="tiktokSounds">
+                            <div class="sound-item">
+                                <span class="sound-icon">🎶</span>
+                                <div class="sound-info">
+                                    <span class="sound-name">오리지널 사운드 활용</span>
+                                    <span class="sound-tip">나레이션, ASMR, 일상 소리</span>
+                                </div>
+                            </div>
+                            <div class="sound-item">
+                                <span class="sound-icon">🔊</span>
+                                <div class="sound-info">
+                                    <span class="sound-name">트렌딩 음악 활용</span>
+                                    <span class="sound-tip">틱톡 음악 라이브러리 확인</span>
+                                </div>
+                            </div>
+                            <div class="sound-item">
+                                <span class="sound-icon">🗣️</span>
+                                <div class="sound-info">
+                                    <span class="sound-name">보이스오버 트렌드</span>
+                                    <span class="sound-tip">스토리텔링, 설명 영상</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="trend-category">
+                        <div class="trend-category-header">💡 콘텐츠 아이디어</div>
+                        <div class="content-ideas" id="tiktokIdeas">
+                            <div class="idea-card">
+                                <span class="idea-type">챌린지</span>
+                                <span class="idea-text">현재 유행하는 챌린지에 참여하거나 변형</span>
+                            </div>
+                            <div class="idea-card">
+                                <span class="idea-type">듀엣/스티치</span>
+                                <span class="idea-text">인기 영상에 반응하거나 추가 콘텐츠 제작</span>
+                            </div>
+                            <div class="idea-card">
+                                <span class="idea-type">튜토리얼</span>
+                                <span class="idea-text">15-60초 빠른 팁, 꿀팁, 하우투</span>
+                            </div>
+                            <div class="idea-card">
+                                <span class="idea-type">비포/애프터</span>
+                                <span class="idea-text">변화 과정을 보여주는 트랜지션</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 릴스 트렌드 -->
+                <div class="shorts-platform-content" id="reels-content">
+                    <div class="trend-category">
+                        <div class="trend-category-header">🔥 인기 해시태그</div>
+                        <div class="trend-tags" id="reelsHashtags">
+                            <span class="trend-tag">#reels</span>
+                            <span class="trend-tag">#reelsinstagram</span>
+                            <span class="trend-tag">#instareels</span>
+                            <span class="trend-tag">#viral</span>
+                            <span class="trend-tag">#explore</span>
+                            <span class="trend-tag">#trending</span>
+                            <span class="trend-tag">#instagram</span>
+                            <span class="trend-tag">#instagood</span>
+                            <span class="trend-tag">#aesthetic</span>
+                            <span class="trend-tag">#lifestyle</span>
+                        </div>
+                    </div>
+                    <div class="trend-category">
+                        <div class="trend-category-header">📊 릴스 최적화 팁</div>
+                        <div class="optimization-tips">
+                            <div class="tip-card">
+                                <span class="tip-icon">⏱️</span>
+                                <span class="tip-text">7-15초가 최적 길이 (알고리즘 선호)</span>
+                            </div>
+                            <div class="tip-card">
+                                <span class="tip-icon">📝</span>
+                                <span class="tip-text">캡션에 키워드 3-5개 포함</span>
+                            </div>
+                            <div class="tip-card">
+                                <span class="tip-icon">🎯</span>
+                                <span class="tip-text">해시태그 5-10개가 최적</span>
+                            </div>
+                            <div class="tip-card">
+                                <span class="tip-icon">🕐</span>
+                                <span class="tip-text">업로드 후 30분 내 참여도가 중요</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 쇼츠 트렌드 -->
+                <div class="shorts-platform-content" id="shorts-content">
+                    <div class="trend-category">
+                        <div class="trend-category-header">🔥 쇼츠 인기 키워드</div>
+                        <div class="trend-tags" id="shortsKeywords">
+                            <span class="trend-tag">#shorts</span>
+                            <span class="trend-tag">#youtubeshorts</span>
+                            <span class="trend-tag">#short</span>
+                            <span class="trend-tag">#viral</span>
+                            <span class="trend-tag">#subscribe</span>
+                            <span class="trend-tag">#trending</span>
+                            <span class="trend-tag">#funny</span>
+                            <span class="trend-tag">#satisfying</span>
+                        </div>
+                    </div>
+                    <div class="trend-category">
+                        <div class="trend-category-header">📊 쇼츠 최적화 전략</div>
+                        <div class="optimization-tips">
+                            <div class="tip-card">
+                                <span class="tip-icon">⏱️</span>
+                                <span class="tip-text">15-30초가 최적 (최대 60초)</span>
+                            </div>
+                            <div class="tip-card">
+                                <span class="tip-icon">🎬</span>
+                                <span class="tip-text">첫 1초에 시선 사로잡기</span>
+                            </div>
+                            <div class="tip-card">
+                                <span class="tip-icon">🔄</span>
+                                <span class="tip-text">루프 가능한 콘텐츠 제작</span>
+                            </div>
+                            <div class="tip-card">
+                                <span class="tip-icon">📱</span>
+                                <span class="tip-text">9:16 세로 비율 필수</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="trend-category">
+                        <div class="trend-category-header">🔗 롱폼 연결 전략</div>
+                        <div class="longform-strategy">
+                            <p>쇼츠로 유입 → 롱폼 영상으로 전환</p>
+                            <ul>
+                                <li>쇼츠에서 "자세한 내용은 채널에서" 유도</li>
+                                <li>롱폼 하이라이트를 쇼츠로 재활용</li>
+                                <li>시리즈물 쇼츠로 구독 유도</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 키워드 기반 숏폼 아이디어 -->
+                <div class="shorts-keyword-ideas">
+                    <div class="trend-category-header">🎯 현재 키워드 기반 숏폼 아이디어</div>
+                    <div class="keyword-shorts-ideas" id="keywordShortsIdeas">
+                        <div class="template-loading">키워드 검색 후 아이디어가 생성됩니다</div>
                     </div>
                 </div>
             </div>
@@ -4529,7 +5062,66 @@
             document.querySelectorAll('.helper-tab-content').forEach(content => {
                 content.classList.toggle('active', content.id === tabId);
             });
+
+            // 숏폼 트렌드 탭 진입 시 키워드 기반 아이디어 생성
+            if (tabId === 'shorts-keywords') {
+                generateShortsIdeas();
+            }
         }
+
+        // 숏폼 플랫폼 탭 전환
+        function switchShortsPlatform(platform) {
+            document.querySelectorAll('.platform-tab').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.platform === platform);
+            });
+
+            document.querySelectorAll('.shorts-platform-content').forEach(content => {
+                content.classList.toggle('active', content.id === `${platform}-content`);
+            });
+        }
+
+        // 키워드 기반 숏폼 아이디어 생성
+        function generateShortsIdeas() {
+            const container = document.getElementById('keywordShortsIdeas');
+            const keyword = document.getElementById('searchInput').value.trim();
+
+            if (!keyword) {
+                container.innerHTML = '<div class="template-loading">키워드 검색 후 아이디어가 생성됩니다</div>';
+                return;
+            }
+
+            const ideas = [
+                { platform: '틱톡', text: `"${keyword}" 30초 빠른 설명 + 트렌딩 사운드` },
+                { platform: '틱톡', text: `"${keyword}" 비포/애프터 트랜지션 영상` },
+                { platform: '틱톡', text: `"${keyword}" 관련 반응 영상 (듀엣/스티치)` },
+                { platform: '릴스', text: `"${keyword}" 미적 감각 강조 + #aesthetic 해시태그` },
+                { platform: '릴스', text: `"${keyword}" 15초 핵심 팁 카드 형식` },
+                { platform: '릴스', text: `"${keyword}" 라이프스타일 브이로그 스니펫` },
+                { platform: '쇼츠', text: `"${keyword}" 롱폼 영상 하이라이트 편집` },
+                { platform: '쇼츠', text: `"${keyword}" Q&A 형식 (질문으로 시작)` },
+                { platform: '쇼츠', text: `"${keyword}" TOP 3/5 리스트 빠른 편집` },
+                { platform: '공통', text: `"${keyword}" 첫 1초 충격적인 훅으로 시작` },
+                { platform: '공통', text: `"${keyword}" 자막 필수 + 세로 9:16 비율` },
+                { platform: '공통', text: `"${keyword}" 루프 가능한 엔딩 만들기` }
+            ];
+
+            container.innerHTML = ideas.map(idea => `
+                <div class="shorts-idea-item">
+                    <div class="shorts-idea-platform">${idea.platform}</div>
+                    <div class="shorts-idea-text">${idea.text}</div>
+                </div>
+            `).join('');
+        }
+
+        // 해시태그 클릭 시 복사
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('trend-tag')) {
+                const tag = e.target.textContent;
+                navigator.clipboard.writeText(tag).then(() => {
+                    showToast(`"${tag}" 복사됨`);
+                });
+            }
+        });
 
         // 검색 결과 데이터로 콘텐츠 분석
         function analyzeContentData() {
@@ -4663,23 +5255,52 @@
         // 커스텀 제목 생성
         function generateCustomTitles() {
             const input = document.getElementById('customTitleInput').value.trim();
-            if (!input) return;
+            if (!input) {
+                showToast('키워드를 입력해주세요');
+                return;
+            }
 
+            // 다양한 패턴의 AI 제목 생성
             const patterns = [
-                `${input} 완벽 정리 | 꼭 알아야 할 것들`,
-                `이 영상 하나로 ${input} 마스터하기`,
-                `${input} 비교 분석 | 어떤 게 최고?`,
-                `${input} 실패하는 이유와 해결법`,
-                `${input} 시작 전 반드시 봐야 할 영상`
+                // 궁금증 유발
+                `${input}, 진짜 효과 있을까? 직접 해봤습니다`,
+                `${input} 아직도 모르면 손해! 2024 최신 정리`,
+                `${input} 1년 해본 솔직 후기 (장단점 총정리)`,
+                // 숫자/리스트
+                `${input} 꼭 알아야 할 5가지 핵심 포인트`,
+                `${input} TOP 10 | 전문가가 추천하는 베스트`,
+                `${input} 3분 만에 완벽 이해하기`,
+                // 비교/선택
+                `${input} vs 대안 비교 | 뭐가 더 좋을까?`,
+                `${input} 고를 때 이것만 보세요 (초보 필수)`,
+                // 문제 해결
+                `${input} 안 되는 이유? 이렇게 하면 됩니다`,
+                `${input} 실패하는 사람들의 공통점 3가지`,
+                `${input} 완전 초보도 따라하는 방법`,
+                // 트렌드/최신
+                `2024 ${input} 트렌드 총정리 | 꼭 봐야 할 영상`,
+                `${input} 최신 업데이트! 바뀐 점 정리`,
+                // 감성/스토리
+                `${input} 시작한 지 100일, 달라진 것들`,
+                `${input} 때문에 인생이 바뀌었습니다`,
+                // 쇼츠/숏폼용
+                `${input} 30초 요약 #shorts`,
+                `${input} 이거 실화? 😱 #shorts`
             ];
 
+            // 랜덤하게 10개 선택
+            const shuffled = patterns.sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 10);
+
             const suggestedTitles = document.getElementById('suggestedTitles');
-            suggestedTitles.innerHTML = patterns.map(p => `
+            suggestedTitles.innerHTML = selected.map(p => `
                 <div class="template-item" onclick="copyToClipboard('${escapeHtml(p)}')">
                     <span class="template-text">${escapeHtml(p)}</span>
-                    <span class="template-copy">클릭하여 복사</span>
+                    <span class="template-copy">📋 복사</span>
                 </div>
             `).join('');
+
+            showToast('제목이 생성되었습니다');
         }
 
         // 태그 추천 렌더링
