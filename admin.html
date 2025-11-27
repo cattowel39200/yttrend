@@ -633,6 +633,160 @@
             }
         }
 
+        /* 공지사항 폼 */
+        .notice-form {
+            padding: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #333;
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #888;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+            background-color: #fff;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            background: #252525;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .form-group textarea::placeholder {
+            color: #666;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .notice-preview {
+            margin-top: 20px;
+            padding: 15px;
+            background: #252525;
+            border-radius: 8px;
+        }
+
+        .preview-label {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .preview-content {
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .preview-content.info {
+            background: rgba(72, 219, 251, 0.2);
+            border-left: 3px solid #48dbfb;
+            color: #48dbfb;
+        }
+
+        .preview-content.warning {
+            background: rgba(254, 202, 87, 0.2);
+            border-left: 3px solid #feca57;
+            color: #feca57;
+        }
+
+        .preview-content.urgent {
+            background: rgba(233, 69, 96, 0.2);
+            border-left: 3px solid #e94560;
+            color: #e94560;
+        }
+
+        /* 설정 정보 */
+        .settings-info {
+            padding: 20px;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            color: #888;
+            min-width: 150px;
+        }
+
+        .setting-value {
+            color: #48dbfb;
+            font-weight: 600;
+        }
+
+        .setting-note {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
         /* 반응형 */
         @media (max-width: 768px) {
             .sidebar {
@@ -913,18 +1067,71 @@
 
             <!-- 설정 섹션 -->
             <section class="section" id="settings">
+                <!-- 공지사항 관리 -->
                 <div class="data-table-container">
                     <div class="table-header">
-                        <h3>시스템 설정</h3>
+                        <h3>공지사항 관리</h3>
                     </div>
-                    <div style="padding: 20px; color: #888;">
-                        <p>향후 업데이트에서 추가될 예정입니다.</p>
-                        <ul style="margin-top: 15px; margin-left: 20px;">
-                            <li>비회원 일일 검색 제한 설정</li>
-                            <li>회원 등급별 기능 제한</li>
-                            <li>공지사항 관리</li>
-                            <li>서비스 점검 모드</li>
-                        </ul>
+                    <div class="notice-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>공지 활성화</label>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="noticeEnabled">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>공지 유형</label>
+                                <select id="noticeType">
+                                    <option value="info">안내 (파란색)</option>
+                                    <option value="warning">주의 (노란색)</option>
+                                    <option value="urgent">긴급 (빨간색)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>공지 내용</label>
+                            <textarea id="noticeContent" rows="3" placeholder="공지사항 내용을 입력하세요..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-primary" onclick="saveNotice()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                    <polyline points="17 21 17 13 7 13 7 21"/>
+                                    <polyline points="7 3 7 8 15 8"/>
+                                </svg>
+                                저장
+                            </button>
+                            <button class="btn btn-secondary" onclick="loadCurrentNotice()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                                </svg>
+                                새로고침
+                            </button>
+                        </div>
+                        <div class="notice-preview" id="noticePreview" style="display: none;">
+                            <div class="preview-label">미리보기</div>
+                            <div class="preview-content" id="previewContent"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 검색 제한 설정 -->
+                <div class="data-table-container">
+                    <div class="table-header">
+                        <h3>검색 제한 설정</h3>
+                    </div>
+                    <div class="settings-info">
+                        <div class="setting-item">
+                            <span class="setting-label">비회원 일일 검색 제한</span>
+                            <span class="setting-value">5회</span>
+                            <span class="setting-note">(코드에서 변경 가능)</span>
+                        </div>
+                        <div class="setting-item">
+                            <span class="setting-label">로그인 회원</span>
+                            <span class="setting-value">무제한</span>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1401,6 +1608,99 @@
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
+
+        // 공지사항 저장
+        async function saveNotice() {
+            const enabled = document.getElementById('noticeEnabled').checked;
+            const type = document.getElementById('noticeType').value;
+            const content = document.getElementById('noticeContent').value.trim();
+
+            if (enabled && !content) {
+                showToast('공지 내용을 입력해주세요');
+                return;
+            }
+
+            try {
+                await db.collection('settings').doc('notice').set({
+                    enabled: enabled,
+                    type: type,
+                    content: content,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy: currentUser.uid
+                });
+
+                showToast('공지사항이 저장되었습니다');
+                updateNoticePreview();
+
+            } catch (error) {
+                console.error('공지사항 저장 오류:', error);
+                showToast('저장 중 오류가 발생했습니다');
+            }
+        }
+
+        // 현재 공지사항 불러오기
+        async function loadCurrentNotice() {
+            try {
+                const doc = await db.collection('settings').doc('notice').get();
+
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById('noticeEnabled').checked = data.enabled || false;
+                    document.getElementById('noticeType').value = data.type || 'info';
+                    document.getElementById('noticeContent').value = data.content || '';
+                    updateNoticePreview();
+                    showToast('공지사항을 불러왔습니다');
+                } else {
+                    showToast('저장된 공지사항이 없습니다');
+                }
+
+            } catch (error) {
+                console.error('공지사항 로드 오류:', error);
+                showToast('불러오기 중 오류가 발생했습니다');
+            }
+        }
+
+        // 공지사항 미리보기 업데이트
+        function updateNoticePreview() {
+            const enabled = document.getElementById('noticeEnabled').checked;
+            const type = document.getElementById('noticeType').value;
+            const content = document.getElementById('noticeContent').value.trim();
+            const preview = document.getElementById('noticePreview');
+            const previewContent = document.getElementById('previewContent');
+
+            if (enabled && content) {
+                preview.style.display = 'block';
+                previewContent.className = 'preview-content ' + type;
+                previewContent.textContent = content;
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+
+        // 공지 입력 실시간 미리보기
+        document.addEventListener('DOMContentLoaded', () => {
+            const noticeEnabled = document.getElementById('noticeEnabled');
+            const noticeType = document.getElementById('noticeType');
+            const noticeContent = document.getElementById('noticeContent');
+
+            if (noticeEnabled) {
+                noticeEnabled.addEventListener('change', updateNoticePreview);
+            }
+            if (noticeType) {
+                noticeType.addEventListener('change', updateNoticePreview);
+            }
+            if (noticeContent) {
+                noticeContent.addEventListener('input', updateNoticePreview);
+            }
+
+            // 설정 섹션 진입 시 공지사항 로드
+            const settingsNav = document.querySelector('[data-section="settings"]');
+            if (settingsNav) {
+                settingsNav.addEventListener('click', () => {
+                    setTimeout(loadCurrentNotice, 100);
+                });
+            }
+        });
     </script>
 </body>
 </html>
