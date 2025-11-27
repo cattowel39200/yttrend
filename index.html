@@ -3409,6 +3409,13 @@
                     </svg>
                     저장한 영상
                 </h3>
+                <button class="export-btn content-helper-btn" onclick="openContentHelperWithFavorites()" title="저장한 영상으로 콘텐츠 제작 도우미 열기">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20h9"/>
+                        <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                    </svg>
+                    콘텐츠 도우미
+                </button>
             </div>
             <div class="favorites-grid" id="favoritesGrid"></div>
         </div>
@@ -5044,6 +5051,39 @@
             const section = document.getElementById('contentHelperSection');
             section.style.display = 'block';
             analyzeContentData();
+        }
+
+        // 즐겨찾기 영상으로 콘텐츠 도우미 열기
+        function openContentHelperWithFavorites() {
+            if (!favorites || favorites.length === 0) {
+                showToast('저장한 영상이 없습니다');
+                return;
+            }
+
+            // 즐겨찾기 데이터를 currentVideos 형식으로 변환
+            const favoritesAsVideos = favorites.map(fav => ({
+                id: fav.id,
+                videoId: fav.id,
+                title: fav.title,
+                thumbnail: fav.thumbnail,
+                views: fav.views || 0,
+                publishedAt: fav.publishedAt || null,
+                duration: fav.duration || '',
+                channelTitle: fav.channel || ''
+            }));
+
+            // 임시로 currentVideos에 즐겨찾기 데이터 저장
+            const originalVideos = currentVideos;
+            currentVideos = favoritesAsVideos;
+
+            const section = document.getElementById('contentHelperSection');
+            section.style.display = 'block';
+            analyzeContentData();
+
+            // 원래 데이터 복원
+            currentVideos = originalVideos;
+
+            showToast(`저장한 영상 ${favorites.length}개로 분석 중`);
         }
 
         // 콘텐츠 도우미 닫기
