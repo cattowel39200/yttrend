@@ -5125,12 +5125,12 @@
 
         // 검색 결과 데이터로 콘텐츠 분석
         function analyzeContentData() {
-            if (!searchResultsData || searchResultsData.length === 0) {
+            if (!currentVideos || currentVideos.length === 0) {
                 return;
             }
 
             contentHelperData = {
-                videos: searchResultsData,
+                videos: currentVideos,
                 tags: {},
                 titles: [],
                 thumbnails: [],
@@ -5143,7 +5143,7 @@
                 contentHelperData.uploadTimes.hourly[i] = 0;
             }
 
-            searchResultsData.forEach(video => {
+            currentVideos.forEach(video => {
                 // 제목 수집
                 contentHelperData.titles.push({
                     title: video.title,
