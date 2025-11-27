@@ -1801,35 +1801,128 @@
             }
         }
 
-        // YouTube 자동완성 제안 가져오기 (실제 API 사용)
+        // 실제 검색 결과에서 연관 키워드 추출
         async function getYouTubeSuggestions(keyword) {
-            const suggestions = [];
+            const regionCode = document.getElementById('regionCode').value;
 
-            // 다양한 접미사로 연관 키워드 생성
-            const suffixes = [
-                '', ' 추천', ' 리뷰', ' 방법', ' 강의', ' 브이로그',
-                ' 2024', ' 입문', ' 비교', ' 순위', ' 팁', ' 노하우',
-                ' 초보', ' 꿀팁', ' 정리', ' 총정리', ' best', ' top'
-            ];
+            try {
+                // 검색 결과에서 영상 제목 가져오기
+                const searchResult = await fetchYouTubeAPI('search', {
+                    part: 'snippet',
+                    q: keyword,
+                    type: 'video',
+                    maxResults: 25,
+                    regionCode: regionCode
+                });
 
-            // 접두사 변형
-            const prefixes = ['', '최고의 ', '인기 ', '추천 '];
+                if (!searchResult.items || searchResult.items.length === 0) {
+                    return [keyword];
+                }
 
-            // 기본 키워드
-            suggestions.push(keyword);
+                // 비디오 ID로 태그 정보 가져오기
+                const videoIds = searchResult.items.map(item => item.id.videoId).join(',');
+                const videoDetails = await fetchYouTubeAPI('videos', {
+                    part: 'snippet',
+                    id: videoIds
+                });
 
-            // 접미사 변형
-            suffixes.forEach(suffix => {
-                if (suffix) suggestions.push(keyword + suffix);
-            });
+                // 제목과 태그에서 키워드 추출
+                const allKeywords = [];
 
-            // 접두사 변형
-            prefixes.forEach(prefix => {
-                if (prefix) suggestions.push(prefix + keyword);
-            });
+                videoDetails.items.forEach(video => {
+                    // 제목에서 키워드 추출
+                    const titleKeywords = extractKeywordsFromTitle(video.snippet.title, keyword);
+                    allKeywords.push(...titleKeywords);
 
-            // 중복 제거 및 반환
-            return [...new Set(suggestions)];
+                    // 태그에서 키워드 추출 (있는 경우)
+                    if (video.snippet.tags) {
+                        const relevantTags = video.snippet.tags.filter(tag => {
+                            const lowerTag = tag.toLowerCase();
+                            const lowerKeyword = keyword.toLowerCase();
+                            // 원본 키워드 포함하거나 관련성 있는 태그
+                            return lowerTag.includes(lowerKeyword) ||
+                                   lowerKeyword.includes(lowerTag) ||
+                                   tag.length >= 2;
+                        }).slice(0, 5);
+                        allKeywords.push(...relevantTags);
+                    }
+                });
+
+                // 빈도수 계산 및 정렬
+                const keywordFreq = {};
+                allKeywords.forEach(kw => {
+                    const normalized = kw.toLowerCase().trim();
+                    if (normalized.length >= 2 && normalized !== keyword.toLowerCase()) {
+                        keywordFreq[normalized] = (keywordFreq[normalized] || 0) + 1;
+                    }
+                });
+
+                // 빈도순 정렬 후 상위 키워드 반환
+                const sortedKeywords = Object.entries(keywordFreq)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 15)
+                    .map(([kw]) => kw);
+
+                // 원본 키워드를 맨 앞에 추가
+                return [keyword, ...sortedKeywords];
+
+            } catch (error) {
+                console.error('연관 키워드 추출 실패:', error);
+                return [keyword];
+            }
+        }
+
+        // 제목에서 의미 있는 키워드 추출
+        function extractKeywordsFromTitle(title, originalKeyword) {
+            const keywords = [];
+            const lowerOriginal = originalKeyword.toLowerCase();
+
+            // 특수문자 정리 및 단어 분리
+            const cleaned = title
+                .replace(/[\[\]【】\(\)「」『』\|\/\\·•→←↑↓]/g, ' ')
+                .replace(/[^\w\s가-힣a-zA-Z0-9]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            // 불용어 목록
+            const stopWords = new Set([
+                'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by',
+                'this', 'that', 'these', 'those', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
+                'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should',
+                'i', 'you', 'he', 'she', 'it', 'we', 'they', 'my', 'your', 'his', 'her', 'its', 'our', 'their',
+                'vs', 'ep', 'episode', 'part', 'vol', 'chapter',
+                '그', '이', '저', '것', '수', '등', '더', '및', '또', '의', '를', '을', '에', '가', '은', '는'
+            ]);
+
+            // 단어 분리
+            const words = cleaned.split(' ');
+
+            // 2-4단어 조합으로 구문 추출
+            for (let i = 0; i < words.length; i++) {
+                // 단일 단어 (2글자 이상)
+                if (words[i].length >= 2 && !stopWords.has(words[i].toLowerCase())) {
+                    keywords.push(words[i]);
+                }
+
+                // 2단어 조합
+                if (i < words.length - 1) {
+                    const twoWords = `${words[i]} ${words[i+1]}`;
+                    if (twoWords.length >= 4 && !stopWords.has(words[i].toLowerCase())) {
+                        keywords.push(twoWords);
+                    }
+                }
+
+                // 3단어 조합 (원본 키워드 포함 시)
+                if (i < words.length - 2) {
+                    const threeWords = `${words[i]} ${words[i+1]} ${words[i+2]}`;
+                    if (threeWords.toLowerCase().includes(lowerOriginal) ||
+                        lowerOriginal.includes(words[i].toLowerCase())) {
+                        keywords.push(threeWords);
+                    }
+                }
+            }
+
+            return keywords.filter(kw => kw.length >= 2);
         }
 
         // 키워드 경쟁 강도 분석
@@ -2000,8 +2093,8 @@
 
                 updateProgress(85, '롱테일 키워드 분석 중...');
 
-                // 롱테일 키워드 생성 및 실제 경쟁도 측정
-                const longtailKeywords = generateLongtailKeywords(mainKeyword);
+                // 롱테일 키워드 생성 및 실제 경쟁도 측정 (연관 키워드 기반)
+                const longtailKeywords = generateLongtailKeywords(mainKeyword, relatedKeywords);
 
                 // 롱테일 키워드 병렬 분석 (상위 8개)
                 const longtailPromises = longtailKeywords.slice(0, 8).map(async lt => {
@@ -2082,27 +2175,52 @@
             if (label) label.textContent = text;
         }
 
-        // 롱테일 키워드 생성
-        function generateLongtailKeywords(keyword) {
-            const templates = [
-                `${keyword} 하는 법`,
-                `${keyword} 시작하기`,
-                `${keyword} 초보자 가이드`,
-                `${keyword} 꿀팁 모음`,
-                `${keyword} 추천 순위`,
-                `${keyword} 비교 분석`,
-                `${keyword} 장단점`,
-                `${keyword} 실패하는 이유`,
-                `${keyword} 성공 비결`,
-                `${keyword} 무료로 배우기`,
-                `${keyword} 1개월 후기`,
-                `${keyword} 현실적인 조언`,
-                `혼자서 ${keyword} 배우기`,
-                `${keyword} 완전 정복`,
-                `${keyword} A to Z`
-            ];
+        // 롱테일 키워드 생성 (연관 키워드 기반 + 조합)
+        function generateLongtailKeywords(keyword, relatedKeywords = []) {
+            const longtails = new Set();
 
-            return templates;
+            // 1. 연관 키워드 중 3단어 이상인 것 추가
+            relatedKeywords.forEach(kw => {
+                const wordCount = kw.split(' ').length;
+                if (wordCount >= 3) {
+                    longtails.add(kw);
+                }
+            });
+
+            // 2. 연관 키워드 조합으로 롱테일 생성
+            relatedKeywords.slice(0, 5).forEach(kw => {
+                if (kw !== keyword && kw.length >= 2) {
+                    // 키워드 + 연관어 조합
+                    if (!kw.toLowerCase().includes(keyword.toLowerCase())) {
+                        longtails.add(`${keyword} ${kw}`);
+                    }
+                }
+            });
+
+            // 3. 인기 있는 롱테일 패턴 추가 (연관 키워드와 조합)
+            const patterns = ['추천', '비교', '순위', '후기', '방법'];
+            relatedKeywords.slice(0, 3).forEach(kw => {
+                patterns.forEach(pattern => {
+                    if (!kw.includes(pattern)) {
+                        longtails.add(`${kw} ${pattern}`);
+                    }
+                });
+            });
+
+            // 4. 기본 롱테일 패턴 (백업)
+            if (longtails.size < 8) {
+                const backupPatterns = [
+                    `${keyword} 하는 법`,
+                    `${keyword} 초보자`,
+                    `${keyword} 추천`,
+                    `${keyword} 비교`,
+                    `${keyword} 순위`,
+                    `${keyword} 후기`
+                ];
+                backupPatterns.forEach(p => longtails.add(p));
+            }
+
+            return [...longtails].slice(0, 15);
         }
 
         // 연관 키워드 표시 (간단한 태그 형태)
