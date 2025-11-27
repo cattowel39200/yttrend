@@ -490,6 +490,7 @@
         .saved-videos-table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
         }
 
         .saved-videos-table thead {
@@ -500,7 +501,7 @@
         }
 
         .saved-videos-table th {
-            padding: 12px 15px;
+            padding: 12px 10px;
             text-align: left;
             font-weight: 600;
             color: #888;
@@ -508,12 +509,16 @@
             border-bottom: 1px solid #333;
         }
 
-        .saved-videos-table th:first-child {
-            width: 150px;
-        }
+        .saved-videos-table th:nth-child(1) { width: 140px; }
+        .saved-videos-table th:nth-child(2) { width: auto; }
+        .saved-videos-table th:nth-child(3) { width: 100px; }
+        .saved-videos-table th:nth-child(4) { width: 90px; }
+        .saved-videos-table th:nth-child(5) { width: 90px; }
+        .saved-videos-table th:nth-child(6) { width: 70px; }
+        .saved-videos-table th:nth-child(7) { width: 130px; }
 
         .saved-videos-table td {
-            padding: 12px 15px;
+            padding: 12px 10px;
             border-bottom: 1px solid #2a2a2a;
             vertical-align: middle;
         }
@@ -536,13 +541,14 @@
         }
 
         .saved-video-row-title {
+            display: block;
             font-weight: 500;
             color: #fff;
-            max-width: 300px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             cursor: pointer;
+            text-decoration: none;
         }
 
         .saved-video-row-title:hover {
@@ -4591,7 +4597,11 @@
                     id: video.id,
                     title: video.snippet.title,
                     channel: video.snippet.channelTitle,
-                    thumbnail: video.snippet.thumbnails.default?.url,
+                    thumbnail: video.snippet.thumbnails.medium?.url || video.snippet.thumbnails.default?.url,
+                    views: video.statistics?.viewCount,
+                    subscribers: video.channelStats?.subscriberCount,
+                    duration: video.formattedDuration,
+                    publishedAt: video.snippet.publishedAt,
                     addedAt: Date.now()
                 });
                 favorites = favorites.slice(0, 50); // 최대 50개
