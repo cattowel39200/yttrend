@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -128,12 +129,12 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .google-login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         .auth-user {
@@ -192,7 +193,7 @@
             margin-top: 10px;
             display: none;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
 
         .user-dropdown.show {
@@ -253,7 +254,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             display: none;
             justify-content: center;
             align-items: center;
@@ -375,7 +376,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.9);
             display: none;
             justify-content: center;
             align-items: center;
@@ -509,13 +510,33 @@
             border-bottom: 1px solid #333;
         }
 
-        .saved-videos-table th:nth-child(1) { width: 140px; }
-        .saved-videos-table th:nth-child(2) { width: auto; }
-        .saved-videos-table th:nth-child(3) { width: 100px; }
-        .saved-videos-table th:nth-child(4) { width: 90px; }
-        .saved-videos-table th:nth-child(5) { width: 90px; }
-        .saved-videos-table th:nth-child(6) { width: 70px; }
-        .saved-videos-table th:nth-child(7) { width: 130px; }
+        .saved-videos-table th:nth-child(1) {
+            width: 140px;
+        }
+
+        .saved-videos-table th:nth-child(2) {
+            width: auto;
+        }
+
+        .saved-videos-table th:nth-child(3) {
+            width: 100px;
+        }
+
+        .saved-videos-table th:nth-child(4) {
+            width: 90px;
+        }
+
+        .saved-videos-table th:nth-child(5) {
+            width: 90px;
+        }
+
+        .saved-videos-table th:nth-child(6) {
+            width: 70px;
+        }
+
+        .saved-videos-table th:nth-child(7) {
+            width: 130px;
+        }
 
         .saved-videos-table td {
             padding: 12px 10px;
@@ -608,6 +629,7 @@
         }
 
         @media (max-width: 768px) {
+
             .saved-videos-table th:nth-child(3),
             .saved-videos-table td:nth-child(3),
             .saved-videos-table th:nth-child(4),
@@ -629,7 +651,7 @@
             position: absolute;
             bottom: 8px;
             right: 8px;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             color: #fff;
             padding: 3px 6px;
             border-radius: 4px;
@@ -726,7 +748,7 @@
 
         .saved-videos-tab:hover {
             color: #fff;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .saved-videos-tab.active {
@@ -934,17 +956,33 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         @keyframes toastFadeIn {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
         }
 
         @keyframes toastFadeOut {
-            from { opacity: 1; transform: translateX(-50%) translateY(0); }
-            to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            from {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
         }
 
         /* 검색 제한 정보 */
@@ -967,7 +1005,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0, 0, 0, 0.85);
             display: none;
             justify-content: center;
             align-items: center;
@@ -1035,7 +1073,7 @@
 
         .search-limit-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
         }
 
         .search-limit-close {
@@ -1207,14 +1245,37 @@
             border-left: 3px solid #ff6b6b;
         }
 
-        .category-card.entertainment { border-left-color: #ff6b6b; }
-        .category-card.music { border-left-color: #feca57; }
-        .category-card.gaming { border-left-color: #48dbfb; }
-        .category-card.news { border-left-color: #1dd1a1; }
-        .category-card.sports { border-left-color: #ff9f43; }
-        .category-card.education { border-left-color: #a29bfe; }
-        .category-card.tech { border-left-color: #74b9ff; }
-        .category-card.lifestyle { border-left-color: #fd79a8; }
+        .category-card.entertainment {
+            border-left-color: #ff6b6b;
+        }
+
+        .category-card.music {
+            border-left-color: #feca57;
+        }
+
+        .category-card.gaming {
+            border-left-color: #48dbfb;
+        }
+
+        .category-card.news {
+            border-left-color: #1dd1a1;
+        }
+
+        .category-card.sports {
+            border-left-color: #ff9f43;
+        }
+
+        .category-card.education {
+            border-left-color: #a29bfe;
+        }
+
+        .category-card.tech {
+            border-left-color: #74b9ff;
+        }
+
+        .category-card.lifestyle {
+            border-left-color: #fd79a8;
+        }
 
         .category-card h4 {
             font-size: 0.9rem;
@@ -1304,9 +1365,17 @@
             color: #888;
         }
 
-        .stat-card.competition-low .stat-value { color: #1dd1a1; }
-        .stat-card.competition-medium .stat-value { color: #feca57; }
-        .stat-card.competition-high .stat-value { color: #ff6b6b; }
+        .stat-card.competition-low .stat-value {
+            color: #1dd1a1;
+        }
+
+        .stat-card.competition-medium .stat-value {
+            color: #feca57;
+        }
+
+        .stat-card.competition-high .stat-value {
+            color: #ff6b6b;
+        }
 
         .competition-meter {
             height: 8px;
@@ -1322,9 +1391,17 @@
             transition: width 0.5s ease;
         }
 
-        .competition-meter .meter-fill.low { background: linear-gradient(90deg, #1dd1a1, #10ac84); }
-        .competition-meter .meter-fill.medium { background: linear-gradient(90deg, #feca57, #f0b429); }
-        .competition-meter .meter-fill.high { background: linear-gradient(90deg, #ff6b6b, #ee5a5a); }
+        .competition-meter .meter-fill.low {
+            background: linear-gradient(90deg, #1dd1a1, #10ac84);
+        }
+
+        .competition-meter .meter-fill.medium {
+            background: linear-gradient(90deg, #feca57, #f0b429);
+        }
+
+        .competition-meter .meter-fill.high {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a5a);
+        }
 
         /* 연관 키워드 분석 */
         .related-analysis {
@@ -1457,7 +1534,7 @@
 
         .longtail-tag .tag-score {
             font-size: 0.7rem;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.2);
             padding: 2px 6px;
             border-radius: 8px;
         }
@@ -1966,9 +2043,17 @@
             margin-bottom: 4px;
         }
 
-        .trend-stat-value.up { color: #1dd1a1; }
-        .trend-stat-value.down { color: #ff6b6b; }
-        .trend-stat-value.neutral { color: #feca57; }
+        .trend-stat-value.up {
+            color: #1dd1a1;
+        }
+
+        .trend-stat-value.down {
+            color: #ff6b6b;
+        }
+
+        .trend-stat-value.neutral {
+            color: #feca57;
+        }
 
         .trend-stat-label {
             font-size: 0.75rem;
@@ -2210,7 +2295,7 @@
 
         .recommended-tag .tag-count {
             font-size: 0.7rem;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.2);
             padding: 2px 6px;
             border-radius: 8px;
         }
@@ -2283,7 +2368,7 @@
 
         .thumbnail-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .thumbnail-image {
@@ -2317,7 +2402,7 @@
             position: absolute;
             bottom: 8px;
             right: 8px;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             color: #fff;
             padding: 4px 8px;
             border-radius: 4px;
@@ -2404,10 +2489,21 @@
             color: #fff;
         }
 
-        .heatmap-cell.low { background: #1a3a5c; }
-        .heatmap-cell.medium { background: #2d5a8a; }
-        .heatmap-cell.high { background: #48dbfb; }
-        .heatmap-cell.very-high { background: #1dd1a1; }
+        .heatmap-cell.low {
+            background: #1a3a5c;
+        }
+
+        .heatmap-cell.medium {
+            background: #2d5a8a;
+        }
+
+        .heatmap-cell.high {
+            background: #48dbfb;
+        }
+
+        .heatmap-cell.very-high {
+            background: #1dd1a1;
+        }
 
         .duration-bar {
             display: flex;
@@ -2704,7 +2800,7 @@
             position: absolute;
             bottom: 8px;
             right: 8px;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             color: #fff;
             padding: 2px 6px;
             border-radius: 4px;
@@ -2740,9 +2836,17 @@
             gap: 4px;
         }
 
-        .video-card-meta .channel { color: #feca57; }
-        .video-card-meta .views { color: #ff6b6b; }
-        .video-card-meta .subs { color: #48dbfb; }
+        .video-card-meta .channel {
+            color: #feca57;
+        }
+
+        .video-card-meta .views {
+            color: #ff6b6b;
+        }
+
+        .video-card-meta .subs {
+            color: #48dbfb;
+        }
 
         .video-card-actions {
             display: flex;
@@ -3057,7 +3161,7 @@
             left: 0;
             right: 0;
             padding: 8px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
         }
 
         .thumb-views {
@@ -3722,6 +3826,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
+
 <body>
     <div class="container">
         <!-- 사용자 인증 영역 -->
@@ -3729,10 +3834,14 @@
             <div class="auth-guest" id="authGuest">
                 <button class="google-login-btn" id="googleLoginBtn">
                     <svg width="18" height="18" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        <path fill="#4285F4"
+                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                        <path fill="#34A853"
+                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                        <path fill="#FBBC05"
+                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                        <path fill="#EA4335"
+                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                     </svg>
                     구글 로그인
                 </button>
@@ -3742,8 +3851,9 @@
                 <span class="user-name" id="userName"></span>
                 <div class="user-menu">
                     <button class="user-menu-btn" onclick="toggleUserMenu()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="6 9 12 15 18 9"/>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="6 9 12 15 18 9" />
                         </svg>
                     </button>
                     <div class="user-dropdown" id="userDropdown">
@@ -3765,14 +3875,15 @@
             <div class="header-buttons">
                 <button class="header-btn home-btn" onclick="goToHome()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#48dbfb" stroke-width="2">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                        <polyline points="9 22 9 12 15 12 15 22"/>
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
                     </svg>
                     홈
                 </button>
                 <button class="header-btn saved-videos-btn" onclick="openSavedVideosPage()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="#feca57" stroke="#feca57" stroke-width="2">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                     </svg>
                     저장한 영상
                     <span class="saved-count" id="savedCountBadge">0</span>
@@ -3869,7 +3980,8 @@
         <div class="search-section">
             <label>키워드 검색</label>
             <div class="search-box">
-                <input type="text" id="keyword" placeholder="검색할 키워드를 입력하세요" onkeypress="if(event.key==='Enter') search()">
+                <input type="text" id="keyword" placeholder="검색할 키워드를 입력하세요"
+                    onkeypress="if(event.key==='Enter') search()">
                 <button onclick="search()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"></circle>
@@ -3893,7 +4005,7 @@
             <div class="keyword-analysis-header">
                 <h3>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#48dbfb" stroke-width="2">
-                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                     "<span id="analysisKeyword"></span>" 키워드 분석
                 </h3>
@@ -3914,8 +4026,8 @@
             <div class="related-analysis">
                 <h4>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#feca57" stroke-width="2">
-                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                     </svg>
                     연관 키워드 (경쟁 강도 분석)
                 </h4>
@@ -3927,8 +4039,8 @@
             <div class="longtail-section">
                 <h4>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1dd1a1" stroke-width="2">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
                     </svg>
                     추천 롱테일 키워드 (경쟁 낮음)
                 </h4>
@@ -3943,10 +4055,10 @@
             <div class="title-pattern-header">
                 <h3>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#feca57" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
                     </svg>
                     "<span id="patternKeyword"></span>" 인기 제목 패턴
                 </h3>
@@ -3961,9 +4073,9 @@
             <div class="content-helper-header">
                 <h3>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f368e0" stroke-width="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                        <path d="M2 17l10 5 10-5"/>
-                        <path d="M2 12l10 5 10-5"/>
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                        <path d="M2 17l10 5 10-5" />
+                        <path d="M2 12l10 5 10-5" />
                     </svg>
                     콘텐츠 제작 도우미
                 </h3>
@@ -3972,48 +4084,50 @@
 
             <!-- 탭 네비게이션 -->
             <div class="content-helper-tabs">
-                <button class="helper-tab active" data-tab="title-generator" onclick="switchHelperTab('title-generator')">
+                <button class="helper-tab active" data-tab="title-generator"
+                    onclick="switchHelperTab('title-generator')">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                     </svg>
                     제목 생성
                 </button>
-                <button class="helper-tab" data-tab="tag-recommendation" onclick="switchHelperTab('tag-recommendation')">
+                <button class="helper-tab" data-tab="tag-recommendation"
+                    onclick="switchHelperTab('tag-recommendation')">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
-                        <line x1="7" y1="7" x2="7.01" y2="7"/>
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" />
+                        <line x1="7" y1="7" x2="7.01" y2="7" />
                     </svg>
                     태그 추천
                 </button>
                 <button class="helper-tab" data-tab="thumbnail-gallery" onclick="switchHelperTab('thumbnail-gallery')">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                        <circle cx="8.5" cy="8.5" r="1.5"/>
-                        <polyline points="21 15 16 10 5 21"/>
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
                     </svg>
                     썸네일 갤러리
                 </button>
                 <button class="helper-tab" data-tab="upload-optimizer" onclick="switchHelperTab('upload-optimizer')">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
                     </svg>
                     업로드 최적화
                 </button>
                 <button class="helper-tab" data-tab="length-analysis" onclick="switchHelperTab('length-analysis')">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="20" x2="12" y2="10"/>
-                        <line x1="18" y1="20" x2="18" y2="4"/>
-                        <line x1="6" y1="20" x2="6" y2="16"/>
+                        <line x1="12" y1="20" x2="12" y2="10" />
+                        <line x1="18" y1="20" x2="18" y2="4" />
+                        <line x1="6" y1="20" x2="6" y2="16" />
                     </svg>
                     영상 길이
                 </button>
                 <button class="helper-tab" data-tab="shorts-keywords" onclick="switchHelperTab('shorts-keywords')">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                        <path d="M2 17l10 5 10-5"/>
-                        <path d="M2 12l10 5 10-5"/>
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                        <path d="M2 17l10 5 10-5" />
+                        <path d="M2 12l10 5 10-5" />
                     </svg>
                     숏폼 트렌드
                 </button>
@@ -4023,7 +4137,8 @@
             <div class="helper-tab-content active" id="title-generator">
                 <div class="helper-section-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#feca57" stroke-width="2">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                     </svg>
                     AI 제목 추천
                 </div>
@@ -4060,8 +4175,8 @@
             <div class="helper-tab-content" id="tag-recommendation">
                 <div class="helper-section-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#54a0ff" stroke-width="2">
-                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
-                        <line x1="7" y1="7" x2="7.01" y2="7"/>
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" />
+                        <line x1="7" y1="7" x2="7.01" y2="7" />
                     </svg>
                     추천 태그
                 </div>
@@ -4086,9 +4201,10 @@
                     <div class="tags-header">
                         <span>추천 태그 (클릭하여 복사)</span>
                         <button class="copy-all-tags-btn" onclick="copyAllTags()">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
                             </svg>
                             전체 복사
                         </button>
@@ -4110,9 +4226,9 @@
             <div class="helper-tab-content" id="thumbnail-gallery">
                 <div class="helper-section-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                        <circle cx="8.5" cy="8.5" r="1.5"/>
-                        <polyline points="21 15 16 10 5 21"/>
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
                     </svg>
                     인기 썸네일 분석
                 </div>
@@ -4120,7 +4236,8 @@
 
                 <div class="thumbnail-filters">
                     <button class="thumb-filter active" data-filter="all" onclick="filterThumbnails('all')">전체</button>
-                    <button class="thumb-filter" data-filter="high-views" onclick="filterThumbnails('high-views')">고조회수</button>
+                    <button class="thumb-filter" data-filter="high-views"
+                        onclick="filterThumbnails('high-views')">고조회수</button>
                     <button class="thumb-filter" data-filter="recent" onclick="filterThumbnails('recent')">최신</button>
                 </div>
 
@@ -4140,8 +4257,8 @@
             <div class="helper-tab-content" id="upload-optimizer">
                 <div class="helper-section-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1dd1a1" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
                     </svg>
                     최적 업로드 시간
                 </div>
@@ -4150,13 +4267,27 @@
                 <div class="upload-time-chart">
                     <div class="chart-title">요일별 업로드 분포</div>
                     <div class="weekday-chart" id="weekdayChart">
-                        <div class="weekday-bar" data-day="일"><span class="day-label">일</span><div class="bar-fill"></div><span class="bar-value">0</span></div>
-                        <div class="weekday-bar" data-day="월"><span class="day-label">월</span><div class="bar-fill"></div><span class="bar-value">0</span></div>
-                        <div class="weekday-bar" data-day="화"><span class="day-label">화</span><div class="bar-fill"></div><span class="bar-value">0</span></div>
-                        <div class="weekday-bar" data-day="수"><span class="day-label">수</span><div class="bar-fill"></div><span class="bar-value">0</span></div>
-                        <div class="weekday-bar" data-day="목"><span class="day-label">목</span><div class="bar-fill"></div><span class="bar-value">0</span></div>
-                        <div class="weekday-bar" data-day="금"><span class="day-label">금</span><div class="bar-fill"></div><span class="bar-value">0</span></div>
-                        <div class="weekday-bar" data-day="토"><span class="day-label">토</span><div class="bar-fill"></div><span class="bar-value">0</span></div>
+                        <div class="weekday-bar" data-day="일"><span class="day-label">일</span>
+                            <div class="bar-fill"></div><span class="bar-value">0</span>
+                        </div>
+                        <div class="weekday-bar" data-day="월"><span class="day-label">월</span>
+                            <div class="bar-fill"></div><span class="bar-value">0</span>
+                        </div>
+                        <div class="weekday-bar" data-day="화"><span class="day-label">화</span>
+                            <div class="bar-fill"></div><span class="bar-value">0</span>
+                        </div>
+                        <div class="weekday-bar" data-day="수"><span class="day-label">수</span>
+                            <div class="bar-fill"></div><span class="bar-value">0</span>
+                        </div>
+                        <div class="weekday-bar" data-day="목"><span class="day-label">목</span>
+                            <div class="bar-fill"></div><span class="bar-value">0</span>
+                        </div>
+                        <div class="weekday-bar" data-day="금"><span class="day-label">금</span>
+                            <div class="bar-fill"></div><span class="bar-value">0</span>
+                        </div>
+                        <div class="weekday-bar" data-day="토"><span class="day-label">토</span>
+                            <div class="bar-fill"></div><span class="bar-value">0</span>
+                        </div>
                     </div>
                 </div>
 
@@ -4179,9 +4310,9 @@
             <div class="helper-tab-content" id="length-analysis">
                 <div class="helper-section-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5f27cd" stroke-width="2">
-                        <line x1="12" y1="20" x2="12" y2="10"/>
-                        <line x1="18" y1="20" x2="18" y2="4"/>
-                        <line x1="6" y1="20" x2="6" y2="16"/>
+                        <line x1="12" y1="20" x2="12" y2="10" />
+                        <line x1="18" y1="20" x2="18" y2="4" />
+                        <line x1="6" y1="20" x2="6" y2="16" />
                     </svg>
                     최적 영상 길이 분석
                 </div>
@@ -4248,9 +4379,9 @@
             <div class="helper-tab-content" id="shorts-keywords">
                 <div class="helper-section-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF0050" stroke-width="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                        <path d="M2 17l10 5 10-5"/>
-                        <path d="M2 12l10 5 10-5"/>
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                        <path d="M2 17l10 5 10-5" />
+                        <path d="M2 12l10 5 10-5" />
                     </svg>
                     숏폼 트렌드 (틱톡/릴스/쇼츠)
                 </div>
@@ -4438,7 +4569,7 @@
             <div class="trend-timeline-header">
                 <h3>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#48dbfb" stroke-width="2">
-                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                     </svg>
                     "<span id="trendKeyword"></span>" 트렌드 추이
                 </h3>
@@ -4462,33 +4593,12 @@
             </div>
         </div>
 
-        <!-- 트렌드 카테고리 추천 -->
-        <div class="trend-recommend" id="trendRecommend">
-            <div class="trend-recommend-header">
-                <h3>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="2">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                    </svg>
-                    실시간 트렌드 키워드
-                </h3>
-                <button class="refresh-btn" onclick="loadTrendKeywords()">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-                    </svg>
-                    새로고침
-                </button>
-            </div>
-            <div class="category-grid" id="categoryGrid">
-                <div class="trend-loading">트렌드 키워드 로딩 중...</div>
-            </div>
-        </div>
-
         <div class="trend-chart" id="trendChartContainer" style="display: none;">
             <div class="trend-chart-header">
                 <h3>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#feca57" stroke-width="2">
-                        <path d="M3 3v18h18"/>
-                        <path d="M18 9l-5 5-4-4-6 6"/>
+                        <path d="M3 3v18h18" />
+                        <path d="M18 9l-5 5-4-4-6 6" />
                     </svg>
                     트렌드 분석
                 </h3>
@@ -4512,7 +4622,7 @@
                     <span class="results-count" id="resultsCount"></span>
                     <button class="export-btn" onclick="exportToGoogleSheets()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"/>
+                            <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z" />
                         </svg>
                         구글 시트로 내보내기
                     </button>
@@ -4526,6 +4636,8 @@
                         <th class="sortable" data-sort="channel">채널명</th>
                         <th class="sortable" data-sort="subscribers">구독자수</th>
                         <th class="sortable" data-sort="views">조회수</th>
+                        <th>성과지수</th>
+                        <th>반응도</th>
                         <th class="sortable" data-sort="duration">영상시간</th>
                         <th class="sortable" data-sort="date">업로드일</th>
                         <th>액션</th>
@@ -4651,133 +4763,7 @@
             `).join('');
         }
 
-        // YouTube 카테고리 매핑
-        const categoryMap = {
-            '1': { name: '영화/애니메이션', class: 'entertainment', icon: '🎬' },
-            '2': { name: '자동차', class: 'tech', icon: '🚗' },
-            '10': { name: '음악', class: 'music', icon: '🎵' },
-            '15': { name: '반려동물', class: 'lifestyle', icon: '🐾' },
-            '17': { name: '스포츠', class: 'sports', icon: '⚽' },
-            '20': { name: '게임', class: 'gaming', icon: '🎮' },
-            '22': { name: '일상/브이로그', class: 'lifestyle', icon: '📷' },
-            '23': { name: '코미디', class: 'entertainment', icon: '😂' },
-            '24': { name: '엔터테인먼트', class: 'entertainment', icon: '🎭' },
-            '25': { name: '뉴스/정치', class: 'news', icon: '📰' },
-            '26': { name: '노하우/스타일', class: 'lifestyle', icon: '💄' },
-            '27': { name: '교육', class: 'education', icon: '📚' },
-            '28': { name: '과학기술', class: 'tech', icon: '🔬' }
-        };
 
-        // 트렌드 키워드 로드 (태그 기반 + 조회수 가중치)
-        async function loadTrendKeywords() {
-            const categoryGrid = document.getElementById('categoryGrid');
-            categoryGrid.innerHTML = '<div class="trend-loading">트렌드 키워드 로딩 중...</div>';
-
-            try {
-                const apiKey = document.getElementById('apiKey').value.trim();
-                if (!apiKey) {
-                    categoryGrid.innerHTML = '<div class="trend-loading">API 키가 필요합니다.</div>';
-                    return;
-                }
-
-                // 선택된 국가 코드 가져오기
-                const regionCode = document.getElementById('regionCode').value;
-
-                // 인기 동영상 가져오기 (태그 + 통계 포함)
-                const response = await fetchYouTubeAPI('videos', {
-                    part: 'snippet,statistics',
-                    chart: 'mostPopular',
-                    regionCode: regionCode,
-                    maxResults: 50
-                });
-
-                // 카테고리별로 그룹화 및 태그 추출
-                const categoryKeywords = {};
-
-                response.items.forEach(video => {
-                    const catId = video.snippet.categoryId;
-                    const catInfo = categoryMap[catId] || { name: '기타', class: 'entertainment', icon: '📺' };
-                    const viewCount = parseInt(video.statistics.viewCount || 0);
-
-                    if (!categoryKeywords[catId]) {
-                        categoryKeywords[catId] = {
-                            ...catInfo,
-                            tagScores: {}  // 태그별 점수 저장
-                        };
-                    }
-
-                    // 태그에서 키워드 추출 (태그가 있는 경우만)
-                    if (video.snippet.tags && video.snippet.tags.length > 0) {
-                        // 조회수 가중치 계산 (1만 조회당 1점, 최대 10점)
-                        const viewWeight = Math.min(10, viewCount / 10000);
-
-                        video.snippet.tags.forEach(tag => {
-                            const normalizedTag = tag.toLowerCase().trim();
-
-                            // 필터링: 범용 태그 및 짧은 태그 제외
-                            if (normalizedTag.length < 2) return;
-                            if (isTrendGenericTag(normalizedTag)) return;
-
-                            // 기존 점수에 가중치 추가
-                            if (!categoryKeywords[catId].tagScores[normalizedTag]) {
-                                categoryKeywords[catId].tagScores[normalizedTag] = 0;
-                            }
-                            categoryKeywords[catId].tagScores[normalizedTag] += (1 + viewWeight);
-                        });
-                    }
-                });
-
-                // 카테고리별 상위 키워드 선정
-                const categoryCards = Object.entries(categoryKeywords)
-                    .filter(([_, cat]) => Object.keys(cat.tagScores).length > 0)
-                    .slice(0, 8)
-                    .map(([catId, cat]) => {
-                        const topKeywords = getTopTrendKeywords(cat.tagScores, 6);
-                        return `
-                            <div class="category-card ${cat.class}">
-                                <h4>${cat.icon} ${cat.name}</h4>
-                                <div class="category-keywords">
-                                    ${topKeywords.map(kw =>
-                                        `<span class="keyword" onclick="searchWithKeyword('${kw}')">${kw}</span>`
-                                    ).join('')}
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-
-                categoryGrid.innerHTML = categoryCards || '<div class="trend-loading">트렌드 데이터를 불러올 수 없습니다.</div>';
-
-            } catch (error) {
-                categoryGrid.innerHTML = `<div class="trend-loading">오류: ${error.message}</div>`;
-            }
-        }
-
-        // 트렌드용 범용 태그 필터링 (더 엄격하게)
-        function isTrendGenericTag(tag) {
-            const genericTags = new Set([
-                // 한글 범용어
-                '리뷰', '추천', '방법', '하는법', '꿀팁', '팁', '정보', '소개', '설명',
-                '브이로그', 'vlog', '일상', '먹방', '톡', '채널', '유튜브', 'youtube',
-                '영상', '동영상', '콘텐츠', '컨텐츠', '2024', '2025', '최신', '공식',
-                '예고편', '예고', '티저', '풀버전', '공개', '최초', '단독', '독점',
-                '라이브', 'live', '실시간', '생방송', '하이라이트', '명장면',
-                '웃긴', '재밌는', '감동', '충격', '반전', '레전드',
-                // 영어 범용어
-                'review', 'tip', 'tips', 'how to', 'howto', 'guide', 'tutorial',
-                'best', 'top', 'new', 'official', 'video', 'clip', 'shorts', 'short',
-                'trailer', 'teaser', 'mv', 'music video', 'full', 'episode', 'ep',
-                'reaction', 'highlight', 'highlights', 'compilation', 'funny', 'viral'
-            ]);
-            return genericTags.has(tag);
-        }
-
-        // 점수 기반 상위 키워드 추출
-        function getTopTrendKeywords(tagScores, count) {
-            return Object.entries(tagScores)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, count)
-                .map(([tag]) => tag);
-        }
 
         // YouTube API 호출 함수 (캐싱 적용)
         async function fetchYouTubeAPI(endpoint, params, useCache = true) {
@@ -5040,7 +5026,7 @@
                 // 경쟁 강도 레벨 계산 (0-100) - 복합 지표 사용
                 const competitionScore = calculateCompetitionScore(mainAnalysis);
                 const competitionLevel = mainAnalysis.competition === 'high' ? 85 :
-                                         mainAnalysis.competition === 'medium' ? 50 : 20;
+                    mainAnalysis.competition === 'medium' ? 50 : 20;
 
                 // 통계 카드 렌더링
                 statsContainer.innerHTML = `
@@ -5057,10 +5043,9 @@
                         <div class="stat-label">평균 구독자</div>
                     </div>
                     <div class="stat-card competition-${mainAnalysis.competition}">
-                        <div class="stat-value">${
-                            mainAnalysis.competition === 'high' ? '높음' :
-                            mainAnalysis.competition === 'medium' ? '보통' : '낮음'
-                        }</div>
+                        <div class="stat-value">${mainAnalysis.competition === 'high' ? '높음' :
+                        mainAnalysis.competition === 'medium' ? '보통' : '낮음'
+                    }</div>
                         <div class="stat-label">경쟁 강도 (${competitionScore}점)</div>
                         <div class="competition-meter">
                             <div class="meter-fill ${mainAnalysis.competition}" style="width: ${competitionLevel}%"></div>
@@ -5099,10 +5084,9 @@
                         <div class="keyword-stats-mini">
                             <span>영상 ${formatViews(item.videoCount)}개</span>
                             <span>평균 ${formatViews(item.avgViews)}회</span>
-                            <span class="competition-badge ${item.competition}">${
-                                item.competition === 'high' ? '경쟁 높음' :
-                                item.competition === 'medium' ? '경쟁 보통' : '경쟁 낮음'
-                            }</span>
+                            <span class="competition-badge ${item.competition}">${item.competition === 'high' ? '경쟁 높음' :
+                        item.competition === 'medium' ? '경쟁 보통' : '경쟁 낮음'
+                    }</span>
                         </div>
                     </div>
                 `).join('');
@@ -5217,9 +5201,9 @@
             const specificTags = relatedKeywords.filter(kw => {
                 const lowerKw = kw.toLowerCase();
                 return !isGenericTag(lowerKw) &&
-                       !lowerKw.includes(lowerKeyword) &&
-                       kw.split(' ').length === 1 &&
-                       kw.length >= 2;
+                    !lowerKw.includes(lowerKeyword) &&
+                    kw.split(' ').length === 1 &&
+                    kw.length >= 2;
             }).slice(0, 5);
 
             specificTags.forEach(tag => {
@@ -5607,7 +5591,7 @@
             document.querySelectorAll('.saved-content-helper .helper-tab').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
-            switch(tabId) {
+            switch (tabId) {
                 case 'titles':
                     renderSavedTitleGenerator();
                     break;
@@ -5712,10 +5696,10 @@
                     <h3 style="color:#feca57;margin-bottom:15px;">요일별 업로드 분포</h3>
                     <div style="display:flex;gap:10px;margin-bottom:30px;">
                         ${weekdays.map((day, i) => {
-                            const count = timingData.weekday[i] || 0;
-                            const maxCount = Math.max(...Object.values(timingData.weekday), 1);
-                            const height = (count / maxCount) * 100;
-                            return `
+                const count = timingData.weekday[i] || 0;
+                const maxCount = Math.max(...Object.values(timingData.weekday), 1);
+                const height = (count / maxCount) * 100;
+                return `
                                 <div style="flex:1;text-align:center;">
                                     <div style="height:100px;display:flex;align-items:flex-end;justify-content:center;">
                                         <div style="width:30px;height:${height}%;background:linear-gradient(to top,#667eea,#764ba2);border-radius:5px 5px 0 0;"></div>
@@ -5724,7 +5708,7 @@
                                     <div style="color:#48dbfb;font-size:0.8rem;">${count}개</div>
                                 </div>
                             `;
-                        }).join('')}
+            }).join('')}
                     </div>
                     <h3 style="color:#feca57;margin-bottom:15px;">추천 업로드 시간</h3>
                     <div style="background:#252525;padding:20px;border-radius:10px;">
@@ -5843,9 +5827,9 @@
                     </thead>
                     <tbody>
                         ${favorites.map(fav => {
-                            const videoUrl = `https://www.youtube.com/watch?v=${fav.id}`;
-                            const publishDate = fav.publishedAt ? new Date(fav.publishedAt).toLocaleDateString('ko-KR') : '-';
-                            return `
+                const videoUrl = `https://www.youtube.com/watch?v=${fav.id}`;
+                const publishDate = fav.publishedAt ? new Date(fav.publishedAt).toLocaleDateString('ko-KR') : '-';
+                return `
                                 <tr>
                                     <td>
                                         <a href="${videoUrl}" target="_blank" rel="noopener noreferrer">
@@ -5879,7 +5863,7 @@
                                     </td>
                                 </tr>
                             `;
-                        }).join('')}
+            }).join('')}
                     </tbody>
                 </table>
             `;
@@ -7114,6 +7098,40 @@
                         <td class="channel-cell" title="${video.snippet.channelTitle}">${video.snippet.channelTitle}</td>
                         <td class="subscribers-cell">${formatSubscribers(subscribers)}</td>
                         <td class="views-cell">${formatViews(views)}</td>
+                        <td class="performance-cell">
+                            ${(() => {
+                        if (views === 0) return '-';
+                        const competitionIndex = subscribers / views;
+                        let colorClass = '';
+                        let label = '';
+                        if (competitionIndex <= 0.05) {
+                            colorClass = '#1dd1a1'; // Very Good
+                            label = '매우 좋음';
+                        } else if (competitionIndex <= 0.1) {
+                            colorClass = '#feca57'; // Good
+                            label = '좋음';
+                        } else {
+                            colorClass = '#ff6b6b'; // Normal/Bad
+                            label = '보통';
+                        }
+                        return `<span style="color:${colorClass};font-weight:bold;">${competitionIndex.toFixed(3)}</span><br><span style="font-size:0.75rem;color:${colorClass}">(${label})</span>`;
+                    })()}
+                        </td>
+                        <td class="engagement-cell">
+                            ${(() => {
+                        if (views === 0) return '-';
+                        const likes = parseInt(video.statistics.likeCount || 0);
+                        const comments = parseInt(video.statistics.commentCount || 0);
+                        const likeRatio = (likes / views) * 100;
+                        const commentRatio = (comments / views) * 100;
+                        return `
+                                    <div style="font-size:0.8rem;">
+                                        <span style="color:#ff9f43">👍 ${likeRatio.toFixed(1)}%</span><br>
+                                        <span style="color:#54a0ff">💬 ${commentRatio.toFixed(2)}%</span>
+                                    </div>
+                                `;
+                    })()}
+                        </td>
                         <td class="duration-cell">${duration}</td>
                         <td class="date-cell">${publishedAt}</td>
                         <td class="link-cell">
@@ -7165,6 +7183,35 @@
                                 <span class="views">${formatViews(views)}회</span>
                                 <span class="subs">${formatSubscribers(subscribers)} 구독</span>
                                 <span>${publishedAt}</span>
+                            </div>
+                            <div class="video-card-performance" style="margin-top:8px;padding-top:8px;border-top:1px solid #333;font-size:0.85rem;">
+                                ${(() => {
+                        if (views === 0) return '';
+                        const competitionIndex = subscribers / views;
+                        const likes = parseInt(video.statistics.likeCount || 0);
+                        const comments = parseInt(video.statistics.commentCount || 0);
+                        const likeRatio = (likes / views) * 100;
+
+                        let colorClass = '';
+                        let label = '';
+                        if (competitionIndex <= 0.05) {
+                            colorClass = '#1dd1a1';
+                            label = '매우 좋음';
+                        } else if (competitionIndex <= 0.1) {
+                            colorClass = '#feca57';
+                            label = '좋음';
+                        } else {
+                            colorClass = '#ff6b6b';
+                            label = '보통';
+                        }
+
+                        return `
+                                        <div style="display:flex;justify-content:space-between;">
+                                            <span>성과지수: <span style="color:${colorClass};font-weight:bold;">${competitionIndex.toFixed(3)} (${label})</span></span>
+                                            <span>👍 ${likeRatio.toFixed(1)}%</span>
+                                        </div>
+                                    `;
+                    })()}
                             </div>
                             <div class="video-card-actions">
                                 <button class="favorite-btn ${isFavorite ? 'active' : ''}" onclick="toggleFavorite('${video.id}', this)">
@@ -7466,7 +7513,7 @@
                 const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = `youtube_trend_${new Date().toISOString().slice(0,10)}.csv`;
+                link.download = `youtube_trend_${new Date().toISOString().slice(0, 10)}.csv`;
                 link.click();
 
                 alert('CSV 파일이 다운로드됩니다.\n\n구글 드라이브에 업로드하거나\n구글 시트에서 "파일 > 가져오기"를 사용하세요.');
@@ -7837,7 +7884,7 @@
         }
 
         // 로그인 버튼 이벤트 리스너 연결
-        document.getElementById('googleLoginBtn').addEventListener('click', function(e) {
+        document.getElementById('googleLoginBtn').addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             console.log('로그인 버튼 클릭됨');
@@ -7939,7 +7986,7 @@
                 if (data) {
                     return JSON.parse(data);
                 }
-            } catch (e) {}
+            } catch (e) { }
             return { date: new Date().toDateString(), count: 0 };
         }
 
@@ -7947,7 +7994,7 @@
         function saveSearchData(data) {
             try {
                 localStorage.setItem(SEARCH_KEY, JSON.stringify(data));
-            } catch (e) {}
+            } catch (e) { }
         }
 
         // 남은 검색 횟수 표시 업데이트
@@ -8111,4 +8158,5 @@
         loadSearchLimitSettings();
     </script>
 </body>
+
 </html>

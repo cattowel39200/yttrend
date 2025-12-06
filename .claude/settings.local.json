@@ -1,17 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" add .)",
-      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"유튜브 연관 키워드 탐색기 - 초기 커밋\")",
-      "Bash(gh repo create yttrend --public --source=\"C:\\Users\\vip\\Documents\\github\\yttrend\" --push)",
-      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" remote add origin https://github.com/cattowel39200/yttrend.git)",
-      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" branch -M main)",
-      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" push -u origin main)",
-      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"API 키 내장 및 입력창 제거\")",
-      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" push)",
-      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"영상 길이 필터 수정 및 구글 시트 내보내기 기능 추가\")",
-      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"트렌드 카테고리 및 뉴스 트렌드 분석 기능 추가\")",
-      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"각 콘텐츠별 정보 복사 버튼 추가\")"
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"generateSuggestedTitles 함수 null 체크 오류 수정\")",
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"콘텐츠 도우미 null 체크 및 변수명 오류 수정\")",
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"$(cat <<''EOF''\n저장한 영상 페이지 단순화 및 검색 결과와 동일한 UI 적용\n\n- 콘텐츠 도우미 탭 제거\n- 저장한 영상 목록을 검색 결과와 동일한 video-card 형태로 변경\n- 삭제/복사/YouTube 링크 버튼 추가\n- 전체 삭제 버튼 헤더로 이동\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"$(cat <<''EOF''\n저장한 영상 페이지 테이블 형식으로 변경\n\n- 그리드 형식에서 테이블 형식으로 UI 변경\n- 왼쪽 작은 썸네일, 오른쪽 영상 정보 배치\n- 등록일, 조회수, 구독자수, 영상길이 컬럼 추가\n- 삭제/보기 버튼 추가\n- 스크롤 가능한 테이블 목록\n- 모바일 반응형 지원\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git -C \"C:\\Users\\vip\\Documents\\github\\yttrend\" commit -m \"$(cat <<''EOF''\n저장 영상 테이블 컬럼 너비 고정 및 데이터 저장 보완\n\n- 테이블 컬럼 너비 고정 (table-layout: fixed)\n- 제목 칸 자동 너비, 나머지 칸 고정 너비\n- 영상 저장 시 조회수, 구독자, 길이, 등록일 정보 추가 저장\n- 썸네일 해상도 향상 (medium 우선)\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
     ],
     "deny": [],
     "ask": []
