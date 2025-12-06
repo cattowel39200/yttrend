@@ -4636,8 +4636,8 @@
                         <th class="sortable" data-sort="channel">채널명</th>
                         <th class="sortable" data-sort="subscribers">구독자수</th>
                         <th class="sortable" data-sort="views">조회수</th>
-                        <th>성과지수</th>
-                        <th>반응도</th>
+                        <th class="sortable" data-sort="performance">성과지수</th>
+                        <th class="sortable" data-sort="engagement">반응도</th>
                         <th>1만 달성(Est)</th>
                         <th>속도지수</th>
                         <th class="sortable" data-sort="duration">영상시간</th>
@@ -6981,6 +6981,29 @@
                     case 'date':
                         valA = new Date(a.snippet.publishedAt).getTime();
                         valB = new Date(b.snippet.publishedAt).getTime();
+                        break;
+                    case 'performance':
+                        // 성과지수: 구독자 / 조회수 (낮을수록 좋음)
+                        // 정렬 시에는 값을 비교하되, 0인 경우(데이터 없음)는 가장 뒤로 보내기 위해 처리 필요
+                        const subsA = channelSubscribersMap[a.snippet.channelId] || 0;
+                        const viewsA = parseInt(a.statistics.viewCount || 0);
+                        valA = viewsA > 0 ? subsA / viewsA : 999999;
+
+                        const subsB = channelSubscribersMap[b.snippet.channelId] || 0;
+                        const viewsB = parseInt(b.statistics.viewCount || 0);
+                        valB = viewsB > 0 ? subsB / viewsB : 999999;
+                        break;
+                    case 'engagement':
+                        // 반응도: (좋아요 + 댓글) / 조회수 (높을수록 좋음)
+                        const likesA = parseInt(a.statistics.likeCount || 0);
+                        const commentsA = parseInt(a.statistics.commentCount || 0);
+                        const vA = parseInt(a.statistics.viewCount || 0);
+                        valA = vA > 0 ? (likesA + commentsA) / vA : -1;
+
+                        const likesB = parseInt(b.statistics.likeCount || 0);
+                        const commentsB = parseInt(b.statistics.commentCount || 0);
+                        const vB = parseInt(b.statistics.viewCount || 0);
+                        valB = vB > 0 ? (likesB + commentsB) / vB : -1;
                         break;
                     default:
                         return 0;
