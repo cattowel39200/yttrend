@@ -4638,6 +4638,8 @@
                         <th class="sortable" data-sort="views">조회수</th>
                         <th>성과지수</th>
                         <th>반응도</th>
+                        <th>1만 달성(Est)</th>
+                        <th>속도지수</th>
                         <th class="sortable" data-sort="duration">영상시간</th>
                         <th class="sortable" data-sort="date">업로드일</th>
                         <th>액션</th>
@@ -7130,6 +7132,36 @@
                                         <span style="color:#54a0ff">💬 ${commentRatio.toFixed(2)}%</span>
                                     </div>
                                 `;
+                    })()}
+                        </td>
+                        <td class="milestone-cell">
+                            ${(() => {
+                        if (views < 10000) return '<span style="color:#888">-</span>';
+                        const now = new Date();
+                        const published = new Date(video.snippet.publishedAt);
+                        const hoursSince = Math.max(1, (now - published) / (1000 * 60 * 60));
+                        const daysSince = Math.max(0.1, hoursSince / 24);
+
+                        // Estimate: 10000 / (Avg Views Per Day)
+                        const avgViewsPerDay = views / daysSince;
+                        const daysTo10k = 10000 / avgViewsPerDay;
+
+                        return `<span style="color:#48dbfb">${daysTo10k.toFixed(1)}일</span>`;
+                    })()}
+                        </td>
+                        <td class="velocity-cell">
+                            ${(() => {
+                        const now = new Date();
+                        const published = new Date(video.snippet.publishedAt);
+                        const hoursSince = Math.max(1, (now - published) / (1000 * 60 * 60));
+                        const velocity = views / hoursSince;
+
+                        let color = '#888';
+                        if (velocity > 1000) color = '#ff6b6b'; // Hot
+                        else if (velocity > 100) color = '#feca57'; // Warm
+                        else if (velocity > 10) color = '#1dd1a1'; // Normal
+
+                        return `<span style="color:${color};font-weight:bold;">${velocity.toFixed(1)}/h</span>`;
                     })()}
                         </td>
                         <td class="duration-cell">${duration}</td>
